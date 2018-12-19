@@ -1,0 +1,41 @@
+<div id="modal_selection" class="ui small modal">
+  <%= if assigns[:paylink_user_id] do %>
+  <% else %>
+    <i class="close icon"></i>
+  <% end %>
+  <div class="content new-method-wrapper mt-4 text-center">
+    <div class="ui grid">
+      <div class="sixteen wide computer eleven wide tablet column">
+        <div class="text-center ui header">List of Authentication</div>
+        <div class="ui segments" name="formValidateAuthorization">
+          <div class="ui segment" id="formStep3_list_coverage">
+            <div class="ui grid">
+
+              <%# UPLOAD GOVERNMENT ISSUED ID %>
+              <div class="eight wide tablet computer column" id="choose_option_government_id">
+                <div class="column mobile-full-width text-center">
+                  <a class="dashboard-img-wrapper modal-open-main">
+                  <i class="id card outline icon"></i>
+                    <p>Upload Government Issued ID</p>
+                  </a>
+                </div>
+              </div>
+
+              <%# ANSWER SECURITY QUESTION %>
+              <div class="eight wide tablet computer column" id="choose_option_security_question">
+                <div class="column mobile-full-width text-center">
+                  <a class="dashboard-img-wrapper modal-open-main">
+                  <i class="file alternate outline icon"></i>
+                    <p>Answer Security Question</p>
+                  </a>
+                </div>
+              </div>
+                </div>
+             </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>

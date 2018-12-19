@@ -1,0 +1,54 @@
+<div id="modal_facial_image" class="ui tiny modal">
+    <%= if assigns[:paylink_user_id] do %>
+    <% else %>
+      <i class="close icon"></i>
+    <% end %>
+    <div class="content">
+      <div class="fs-20 bold mb-2 text-center">Capture Facial Image</div>
+
+  
+     
+        <div class="ui segments">
+          <div class="ui segment">
+            <h5 class="ui header">
+                Capture Facial Image
+            </h5>
+          </div>
+          <div class="ui segment" id="fileUpload">
+            <br>
+              <div class="ui grid centered container">
+                <div class="ui centered special cards">
+                  <div class="card">
+                    <div class="blurring dimmable image">
+                      <div class="ui inverted dimmer">
+                        <div class="content">
+                          <div class="center">
+                            
+                          </div>
+                        </div>
+                      </div>
+                      <img src="/images/file-upload.png" id="facial_image">
+                    </div>
+                    <div class="extra content">
+                   
+                      <%# <span class="right floated"> %>
+                        <%# check for webcam %>
+                        <a class="ui primary button" id="facial_capture"><i class="camera icon"></i>Capture</a>
+                        <br>
+                        <%# </span> %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div id="loader"></div><p role="append_new_err"></p>
+              <!-- <button type="submit" class="ui fluid primary button large"  id="submit_ID" value="Submit">Save</button> -->
+              
+            </div>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  

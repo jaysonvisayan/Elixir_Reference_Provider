@@ -1,0 +1,160 @@
+<div class="ui main container">
+  <div class="ui grid">
+    <div class="sixteen wide column">
+      <h1 class="ui huge header">ACU Schedule</h1>
+      <div class="ui breadcrumb">
+        <a href="/acu_schedules" class="section">ACU Schedules</a>
+        <div class="divider"> / </div>
+        <a href="/acu_schedules" class="section">Search</a>
+        <div class="divider"> / </div>
+        <div class="active section">Show</div>
+      </div>
+      <div class="ui divider"></div>
+        <%# FORM %>
+        <div class="row" id="acu_schedule_no_session_form" role="show">
+          <input type="hidden" name="asm[as_id]" value="<%= @changeset.data.id %>"/>
+          <div class="sixteen wide column">
+            <%= form_for @changeset, acu_schedule_path(@conn, :update_member_schedule, @changeset.data.id), [as: :acu_schedule,  multipart: true, class: "ui form", id: "acu_mobile_edit_form"], fn f -> %>
+
+              <div class="two fields">
+               <div class="field" id="select_account_code">
+                  <%= label f, :account_code, "Account Code/Name", class: "label-title" %>
+                  <%= select f, :account_code, [{"#{@acu_schedule.account_code} | #{@acu_schedule.account_name}", @acu_schedule.account_code}
+], prompt: "", value: @changeset.data.account_code, disabled: true %>
+                  <%= error_tag f, :account_code %>
+                </div>
+              </div>
+              <div class="two fields">
+              </div>
+              <div class="two fields">
+                <div class="field">
+                  <%= label f, :facility_id, "Mobile Facility", class: "label-title" %>
+                  
+                  <input name="acu_schedule[date_from]" type="text" value="<%= map_facilities(@provider) %>" disabled>
+                  <%= error_tag f, :facility_id %>
+                </div>
+                <div class="field">
+                  <%= label f, :guaranteed_amount, "Guaranteed Amount", class: "label-title" %>
+                  <%= number_input f, :guaranteed_amount, readonly: true, value: @changeset.data.guaranteed_amount, disabled: true %>
+                  <%= error_tag f, :guaranteed_amount %>
+                </div>
+              </div>
+              <div class="two fields">
+                <div class="field">
+                  <%= label f, :number_of_members, "Number of Members", class: "label-title" %>
+                  <%= number_input f, :number_of_members_val, readonly: true, value: @changeset.data.no_of_members, disabled: true %>
+                  <%= error_tag f, :number_of_members_val %>
+                </div>
+                <input type="hidden" id="number_of_members" accountCode="" productCode="">
+                <div class="field">
+                  <div class="fields">
+                    <div class="four wide field" id="#">
+                      <%= label f, :date_from, class: "label-title" %>
+                      <div class="ui calendar" id="">
+                        <div class="ui input right icon">
+                          <i class="calendar icon"></i>
+                          <input name="acu_schedule[date_from]" type="text" value="<%= @changeset.data.date_from %>" disabled>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="four wide field" id="#">
+                      <%= label f, :date_to, class: "label-title" %>
+                      <div class="ui calendar" id="">
+                        <div class="ui input right icon">
+                          <i class="calendar icon"></i>
+                          <input name="acu_schedule[date_to]" type="text" disabled="disabled" value="<%= @changeset.data.date_to %>" disabled>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="four wide field" id="#">
+                      <%= label f, :time_from, class: "label-title" %>
+                      <div class="ui calendar time" id="">
+                        <div class="ui input right icon">
+                          <input name="acu_schedule[time_from]" type="text" placeholder="00:00" value="<%= @changeset.data.time_from %>" disabled>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="four wide field" id="#">
+                      <%= label f, :time_to, class: "label-title" %>
+                      <div class="ui calendar time" id="acu_time_to">
+                        <div class="ui input right icon">
+                          <input name="acu_schedule[time_to]" type="text" placeholder="00:00" disabled="disabled" value="<%= @changeset.data.time_to %>">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+        <%# FORM END %>
+        <div class="ui divider"></div>
+        <div class="sixteen wide right aligned column">
+          <h4 class="ui left aligned header">Members</h4>
+        </div>
+        </br>
+        <div class="row" id="new_as_members_tbl">
+          <table role="datatable" id="acu_schedule_tablea" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <%# <th><input type="checkbox" id="checkAllacu"</th> %>
+                <th>Card No</th>
+                <th>Full Name</th>
+                <th>Gender</th>
+                <th>Birthdate</th>
+                <th>Age</th>
+                <th>Package Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for loa <- @loas do %>
+                <tr>
+                  <td><%= member_card_no_checker(loa) %></td>
+                  <td><%= member_full_name(loa) %></td>
+                  <td><%= member_gender(loa) %></td>
+                  <td><%= member_birthdate(loa) %></td>
+                  <td><%= member_age(loa) %></td>
+                  <td><%= member_package_code(loa.id) %></td>
+                </tr>
+              <% end %>
+                  <%# <td><input id="acu_sched_ids" type="checkbox" value="<%= asm.card_no %1>"></td> %>
+                  <%# <td><%= asm.card_no %1></td> %>
+                  <%# <td><%= Enum.join([asm.first_name, asm.middle_name, asm.last_name], " ") %1></td> %>
+                  <%# <td><%= asm.gender %1></td> %>
+                  <%# <td><%= asm.birthdate %1></td> %>
+                  <%# <td><%= member_age(asm.birthdate) %1></td> %>
+                  <%# <td><%= asm.package %1></td> %>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="ui divider"></div>
+        <div class="sixteen wide right aligned column">
+          <h4 class="ui left aligned header">Packages</h4>
+        </div>
+        </br>
+        <div class="row">
+          <table role="datatable" id="acu_schedule_table" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+            <thead>
+              <tr>
+                <th>Package Code</th>
+                <th>Package Description</th>
+                <th>Package Rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%= for acu_schedule_package <- @acu_schedule_packages do %>
+                <tr>
+                  <td><a href="#" class="#" asp_code="<%= acu_schedule_package.code %>" asp_description="<%= acu_schedule_package.description %>" asp_rate="<%= member_package_amount(acu_schedule_package.id) %>" asp_id="<%= acu_schedule_package.id %>"><%= acu_schedule_package.code %></a></td>
+                  <td><%= acu_schedule_package.description %></td>
+                  <td id="<%= acu_schedule_package.loa_id %>"><%= member_package_amount(acu_schedule_package.id) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

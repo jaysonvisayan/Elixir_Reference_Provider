@@ -1,0 +1,33 @@
+@import '../variables';
+.ui {
+    &.modal .scrolling.content {
+        max-height: calc(80vh);
+        .success-message {
+            font-size: 16px;
+        }
+        .success-message--title {
+            font-weight: 700;
+        }
+        .success-message--text {
+            font-weight: 300;
+        }
+        .success-message--register {
+            color: $gray;
+        }
+        .modal-content {
+            .title {
+                color: $gray;
+                text-transform: uppercase;
+                font-size: 12px;
+                font-weight: 700;
+            }
+            .text,
+            .row p {
+                font-size: 16px;
+            }
+        }
+    }
+    &.modal .member-header {
+        border-bottom: 0;
+    }
+}

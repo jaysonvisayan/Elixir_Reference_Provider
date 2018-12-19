@@ -1,0 +1,45 @@
+<div class="ui large modal" role="diagnosis_modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Add Diagnosis/Procedure
+  </div>
+  <div class="content">
+    <p id="no_procedure"></p>
+    <%= form_for @changeset, @action, [as: :loa, class: "ui form mt-3", id: "diagnosis_form"], fn f -> %>
+      <% {:diagnosis, diagnosis } =  @diagnoses %>
+      <% {:procedure, procedure } =  @procedures %>
+      <div class="field" id="diagnosis_field">
+        <%= label f, :diagnosis_id, "Diagnosis", class: "label-title" %>
+        <%= select f, :diagnosis_id, filter_diagnosis_procedure(diagnosis, @loa.loa_diagnosis), class: "ui fluid search selection dropdown", id: "diagnosis" %>
+        <%= error_tag f, :diagnosis_id %>
+      </div>
+      <div id="procedure">
+        <div class="procedure field" id="procedure_select">
+          <div class="fields">
+            <div class="seven wide field" id="procedure_field">
+              <label class="label-title" id="procedure_label" >Procedure Code</label>
+              <%= select f, :procedure_ids, filter_procedure(procedure), class: "ui fluid search selection dropdown procedure", role: "procedures", id: "procedures", category: "procedures" %>
+            </div>
+            <div class="three wide field" id="unit_field">
+              <%= label f, :unit, "Unit", class: "label-title index", id: "unit_label" %>
+              <input type="text" name="loa[unit]" id="unit" role="unit">
+            </div>
+            <div class="three wide field" id="amount_field">
+              <%= label f, :amount, "Amount", class: "label-title index", id: "amount_label"%>
+              <input type="text" name="loa[amount]" id="amount" role="amount">
+            </div>
+            <div class="three wide field" id="add">
+              <label class="label-title" id="add_label">Add</label>
+              <button class="ui basic button plus mobile-mt-1" type="button" id="append_procedure" class="validate_required">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="append"></div>
+      <input type="hidden" id="number" value="0">
+      <input type="hidden" name="loa[loa_id]" value="<%= @loa.id %>">
+      <input type="hidden" name="loa[payor_code]" value="<%= @loa.card.member.payor.code %>">
+      <button class="large ui button fluid" type="button" id="submit">Proceed</button>
+    <% end %>
+  </div>
+</div>

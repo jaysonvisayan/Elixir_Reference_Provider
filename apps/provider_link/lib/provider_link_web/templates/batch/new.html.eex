@@ -1,0 +1,66 @@
+<div class="ui container" id="new_batch">
+  <div class="ui grid">
+    <div class="row">
+      <div class="sixteen wide column">
+        <h1 class="ui huge header">Create Batch</h1>
+      </div>
+    </div>
+    <div class="ui divider mrg0T mrg0B"></div><br />
+    <div class="row">
+      <div class="sixteen wide column">
+        <%= form_for @changeset, batch_path(@conn, :create), [as: :batch, class: "ui form", id: "create_batch_form"], fn f -> %>
+        <%= hidden_input f, :type, value: @type, id: "type" %>
+          <div class="row">
+            <div class="sixteen wide field">
+              Please fill in the batch information.
+            </div>
+
+            <div class="eight wide field">
+              <%= label f, :doctor_id, "Practitioner", style: "font-weight: bold;" %>
+              <%= if @type == "practitioner" do %>
+                <%= select f, :doctor_id, map_doctors(@doctors), class: "ui fluid dropdown", prompt: "Select Practitioner" %>
+              <% else %>
+                <%= select f, :doctor_id, [" ": ""], class: "ui fluid dropdown", disabled: true %>
+              <% end %>
+              <%= error_tag f, :doctorszor_id %>
+            </div>
+
+            <div class="three fields">
+              <div class="eight wide field">
+                <%= label f, :soa_ref_no, "SOA Ref. No.", style: "font-weight: bold;" %>
+                <%= text_input f, :soa_reference_no, placeholder: "Enter SOA Ref. No." %>
+                <%= error_tag f, :soa_reference_no %>
+              </div>
+              <div class="one wide field"></div>
+              <div class="seven wide field">
+                <%= label f, :soa_amount, "Estimated Amount", style: "font-weight: bold;" %>
+                <%= text_input f, :soa_amount, placeholder: "Enter Estimated Amount" %>
+                <%= error_tag f, :soa_amount %>
+              </div>
+            </div>
+
+            <div class="sixteen wide field">
+              <%= label f, :remarks, "Remarks", style: "font-weight: bold;" %>
+              <%= textarea f, :remarks, maxlength: "255" %>
+              <%= error_tag f, :remarks %>
+            </div>
+
+          </div>
+
+          <div class="ui one column right aligned grid">
+            <div class="column eight wide left aligned">
+              <a class="ui large inverted blue button" href="/batch">
+                Cancel
+              </a>
+            </div>
+            <div class="column eight wide">
+              <button class="ui large blue right floated button" type="button" id="create_batch">
+                Create
+              </button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

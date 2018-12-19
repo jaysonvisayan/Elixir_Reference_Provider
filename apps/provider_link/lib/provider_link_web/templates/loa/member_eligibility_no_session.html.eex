@@ -1,0 +1,10 @@
+<div id="loa_no_session"></div>
+<input type="hidden" id="coverage">
+<input type="hidden" id="paylink_user_id" value="<%= @user.paylink_user_id %>">
+<%= render ProviderLinkWeb.PageView, "modal_member.html", paylink_user_id: @user.paylink_user_id %>
+<%= render ProviderLinkWeb.PageView, "modal_member_eligibility.html", paylink_user_id: @user.paylink_user_id %>
+<%= render ProviderLinkWeb.PageView, "modal_card_no_eligibility.html", paylink_user_id: @user.paylink_user_id %>
+<%= render ProviderLinkWeb.PageView, "modal_member_evoucher.html", paylink_user_id: @user.paylink_user_id %>
+<%= render ProviderLinkWeb.PageView, "modal_member_qr_code.html", paylink_user_id: @user.paylink_user_id %>
+<%= render ProviderLinkWeb.PageView, "modal_validate.html" %>
+<%= render ProviderLinkWeb.PageView, "modal_security.html", paylink_user_id: @user.paylink_user_id %>

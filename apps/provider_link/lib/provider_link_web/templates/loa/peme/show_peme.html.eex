@@ -1,0 +1,579 @@
+<div class="ui container" id="loa_show">
+  <div class="ui grid">
+    <p class="info-content">LOA Details</p>
+    <%= if @conn.params["swal"] == "true" do %>
+    <input hidden value=true id="show_swall">
+  <% end %>
+  <input type="hidden" id="coverage" value="<%= String.downcase(@loa.coverage) %>"/>
+  <div class="row">
+    <p class="sixteen wide mobile only column mb-3"><a class="modal-open-member-info">View Member's Detailed Info</a></p>
+    <div class="ten wide computer nine wide tablet sixteen wide mobile column">
+      <div class="ui two column grid">
+        <div class="nine wide computer sixteen wide tablet column">
+          <div class="mb-3 hidden">
+              <span class="info-title">LOA Number</span>
+              <span class="bold fs-20"><%= @loa.loa_number %></span>
+            </div>
+            <div class="mb-3">
+              <span class="info-title">Date</span>
+              <%= if is_nil(@loa.availment_date) do %>
+                <span class="bold fs-20"></span>
+              <% else %>
+                <span class="bold fs-20"><%= format_birthdate2(Ecto.Date.cast(@loa.availment_date)) %></span>
+              <% end %>
+            </div>
+
+            <div class="mb-3">
+                <%= if String.downcase(@loa.coverage) == "op consult" do %>
+                  <span class="info-title">Diagnosis</span>
+                  <%= for loa_diagnosis <- @loa.loa_diagnosis do %>
+                    <div class="fs-16"><%= loa_diagnosis.diagnosis_code %> - <span class="dim thin"><%= loa_diagnosis.diagnosis_description %></span></div>
+                  <% end %>
+                <% else %>
+
+                  <div class="ui divider"></div>
+
+                  <%# # LOA Packages %>
+                  <span class="info-title">Package</span>
+                  <div class="row">
+                    <div class="sixteen wide column">
+                      <table role="" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+                        <thead>
+                          <tr>
+                            <th>Package Code</th>
+                            <th>Package Description</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <%= for loa_package <- @loa.loa_packages do %>
+                            <tr>
+                              <td><%= loa_package.code %></td>
+                              <td><%= loa_package.description %></td>
+                            </tr>
+                          <% end %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <%# # End LOA Packages %>
+
+                  <div class="ui divider"></div>
+
+                  <%# # LOA Procedures %>
+                    <span class="info-title">Procedures</span>
+                    <div class="row">
+                      <div class="sixteen wide column">
+                        <table role="" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+                          <thead>
+                            <tr>
+                              <th>CPT Code</th>
+                              <th>CPT Description</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <%= if is_nil(@loa.loa_procedures) or Enum.empty?(@loa.loa_procedures) do %>
+                              <tr>
+                                <td colspan="2" style="text-align:center;">No Record found!</td>
+                              </tr>
+                              <% else %>
+                              <%= for procedure <- @loa.loa_procedures do %>
+                                <tr>
+                                  <td><%=procedure.procedure_code%></td>
+                                  <td><%=procedure.procedure_description%></td>
+                                </tr>
+                              <% end %>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  <%# # End LOA Procedures %>
+
+                  <%= if @loa.is_peme == false do %>
+                  <%# # Valid Until Date%>
+                     <div class="row hidden">
+                       <div class="eight wide column field">
+                         <div class="ui calendar sixteen wide column" >
+                           <span class="info-title">Valid Until</span>
+                           <div class="ui fluid input right icon">
+                             <i class="calendar icon"></i>
+                             <input type="text"  disabled value="<%= @loa.valid_until %>">
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                    <% end %>
+
+                  <%= if @loa.is_peme == true do %>
+                  <%# ACU Dates %>
+
+                  <%# End ACU Dates %>
+
+                  <%# File Upload %>
+                  <%= form_for @changeset, loa_path(@conn, :verified_loa_peme, @loa), [id: "verify_loa", class: "ui form", multipart: true, as: :loa], fn _f -> %>
+                  <div role="peme-loa-validation">
+                   <div class="ui divider"></div>
+                     <div class="row">
+                       <div class="sixteen wide column field">
+                       <%= if not is_nil(@loa.availment_date) do %>
+                         <div class="ui calendar sixteen wide column">
+                           <span class="info-title"></span>
+                           <div class="ui fluid input right icon">
+                            <% else %>
+                              <div class="ui calendar sixteen wide column" id="availment-date">
+                                <span class="info-title">Availment Date</span>
+                                <div class="ui fluid input right icon">
+                                  <i class="calendar icon"></i>
+                                  <input type="text" name="loa[availment_date]" value="<%= @loa.availment_date %>" disabled>
+                                  <input type="hidden" name="loa[availment_date]" value="<%= @loa.availment_date %>">
+                            <% end%>
+                           </div>
+                         </div>
+                       </div>
+                     </div>
+                     </br>
+                   </div>
+
+                  <div class="row" role="multipleFileUpload">
+
+                    <% loa_state = if String.downcase("#{@loa.status}") != "cancelled" and String.downcase("#{@loa.status}") != "availed" , do: "", else: "disabled" %>
+
+                      <%= if String.downcase(@loa.status) == "availed" do %>
+                        <span class="info-title">Uploaded Statement of Account (SOA)</span>
+                      <% else %>
+                        <span class="info-title">Upload Statement of Account(SOA)</span>
+                        <div class="ui fluid basic icon buttons">
+                          <a class="ui button <%= loa_state %>" id="addFile" style="text-align: left; width: 309.446px">
+                            <span class="upload_txt" name="front_side">
+                              Attach Document
+                            </span>
+                            <i class="cloud upload icon" style="float:right"></i>
+                          </a>
+                          <button type="button" class="ui button <%= loa_state %>" file="front_side" id="upload">
+                            <i class="photo icon"></i>
+                          </button>
+                        </div>
+                      <% end %>
+                        <div class="ui middle aligned list" id="filePreviewContainer">
+                        <%= for file <- @loa.files do %>
+                          <div class="ui grid">
+                            <div class="row">
+                              <div class="two wide column field">
+                                <i class="big file outline icon"></i>
+                              </div>
+                              <div class="twelve wide column field">
+                                <div class="content">
+                                  <%= file.name %>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <% end %>
+                        </div>
+
+
+                  <input type="hidden" name="loa[amount]" value="<%= @loa.total_amount %>"/>
+                  <input type="hidden" name="loa[authorization_id]" value="<%= @loa.payorlink_authorization_id %>"/>
+                  <input type="hidden" name="loa[facility_code]" value="<%= @conn.assigns.current_user.agent.provider.code %>"/>
+                  <input type="hidden" name="loa[member_id]" value="<%= @loa.payorlink_member_id%>"/>
+                  <input type="hidden" name="loa[card_no]" value="<%= @loa.member_card_no%>"/>
+                  <input type="hidden" name="loa[valid_until]" value=" <%= @loa.valid_until %>"/>
+                  <input type="hidden" name="loa[verification_type]" value="<%= @loa.verification_type %>"/>
+                  <input type = "hidden" name="loa[admission_date]" id="admission_date" value="<%= @loa.admission_date %>">
+
+
+                  <%= if String.downcase("#{@loa.status}") != "cancelled" and String.downcase("#{@loa.status}") != "availed" do %>
+                    <div class="ui fluid primary icon buttons">
+                        <a class="ui primary button huge labels" href="#!" id="verify">
+                          <span>
+                          <b>
+                            Verify
+                          </b>
+                          </span>
+                        </a>
+                    </div>
+                  <% end %>
+
+                    <input type="hidden" name="loa[loa_id]" value="<%= @loa.id %>">
+                  <% end %>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <%= if String.downcase("#{@loa.status}") == "availed" or String.downcase("#{@loa.status}") == "cancelled"   do %>
+                    <div class="sixteen wide computer sixteen wide tablet sixteen wide mobile left floated column">
+                      <div class="sixteen wide left floated column">
+                          <a href="/loas" class="ui large basic submit left floated button">Back</a>
+                      </div>
+                    </div>
+                  <% end %>
+                  </div>
+                  <%# End File Upload %>
+                  <% end %>
+                 <% end %> <%# end if condition %>
+              </div>
+          </div>
+
+          <div class="seven wide computer sixteen wide tablet column">
+            <div class="mb-3">
+              <span class="info-title">Status</span>
+              <%= cond do %>
+                <% is_nil(@loa.status) -> %>
+                <% String.downcase(@loa.status) == "draft" -> %>
+                  <span class="tag tag--blue">
+                <% String.downcase(@loa.status) == "pending" -> %>
+                  <span class="tag tag--orange">
+                <% String.downcase(@loa.status) == "approved" -> %>
+                  <span class="tag tag--green">
+                <% String.downcase(@loa.status) == "cancelled" -> %>
+                  <span class="tag tag--black">
+                <% String.downcase(@loa.status) == "disapproved" -> %>
+                  <span class="tag tag--red">
+                <% String.downcase(@loa.status) == "availed" -> %>
+                  <span class="tag tag--blue">
+                <% String.downcase(@loa.status) == "forfeited" -> %>
+                  <span class="tag tag--red">
+                <% true -> %>
+                  <span class="tag tag--orange">
+              <% end %>
+              <%= @loa.status %></span>
+            </div>
+
+            <%= if @loa.is_peme do %>
+            <% else %>
+              <div class="d-inline-block">
+                <div class="d-flex fd-col ai-center">
+                </div>
+              </div>
+            <% end %>
+
+            <div class="mb-3 mt-3 d-flex ai-center">
+              <%= if String.downcase("#{@loa.status}") == "availed"  do %>
+                <img class="mr-2 pdf-image" src="/images/pdf_image.png" alt="">
+                <a href="#" id="dwonload_evoucher_pdf"><img src="" alt="">Download this PDF</a>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="six wide computer only seven wide tablet only column">
+          <div style="text-align: right">
+          <%= if String.downcase("#{@loa.status}") != "cancelled" and String.downcase("#{@loa.status}") != "availed" do %>
+            <a id="cancel_loa" class="ui inverted blue button" style="margin-top: 0px;">CANCEL LOA</a>
+          <% end %>
+        </div>
+        <div class="ui segment secondary">
+          <p class="segment-title">Member</p>
+            <p class="segment-content-bold"><%= peme_format_member_name(@loa) %></p>
+            <p class="segment-content">DOB: <%= format_birthdate(@loa.member_birth_date) %></p>
+            <p class="segment-content">Age: <%= get_age(@loa.member_birth_date) %></p>
+            <p class="segment-content">Gender: <%= @loa.member_gender %></p>
+            <div class="segment-gap"></div>
+            <p class="segment-title">Provider</p>
+            <p class="segment-content-bold"><%= @provider %></p>
+            <div class="segment-gap"></div>
+            <p class="segment-title">Payor</p>
+            <p class="segment-content-bold"><%= if is_nil(@loa.payor) do "" else @loa.payor.name end %></p>
+          <div class="segment-gap"></div>
+
+          <p class="segment-title">Assessed Amount</p>
+          <div class="assessed-amount-wrapper">
+            <div class="assessed-amount-item">
+              <img class="mr-1" src="/images/user.png">
+              <div class="content">
+                <p class="segment-content">Member Pays <br/> Php. <%= @loa.member_pays || 0 %>.00</p>
+              </div>
+            </div>
+            <div class="assessed-amount-item">
+              <img class="mr-1" src="/images/heart.png">
+              <div class="content">
+                <p class="segment-content">Maxicare Pays <br/>Php. <%= @loa.payor_pays || 0 %>.00</p>
+              </div>
+            </div>
+            <div class="assessed-amount-item">
+              <div class="content">
+                <p class="segment-content"><b>Total<br/>Php. <%= @loa.total_amount %>.00</b></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <%# Back Button %>
+
+  </div>
+  <%= form_for @conn, loa_path(@conn, :print_original_evoucher, @loa.id), [as: :loa, class: "ui form mt-3", id: "submit_print_evoucher", target: "_blank"], fn f -> %>
+    <input hidden id="member_qr_code_evoucher" value="<%= @loa.member_evoucher_qr_code %>">
+    <div hidden id="print_qrcode_evoucher">
+    </div>
+    <input hidden id="input_print_qrcode_evoucher" name="print_qrcode_evoucher" value="">
+  <% end %>
+</div>
+
+<div class="ui modal-main tiny modal" id="cancel_main_modal">
+  <i class="close icon"></i>
+  <div class="scrolling content">
+    <div class="text-center">
+      <p class="success-message success-message--title mt-2">Are you sure you want to cancel this LOA?</p>
+    </div>
+    <div class="modal-content mt-4">
+      <input type="hidden" value="<%= @loa.id %>" id="loa_id">
+      <input type="hidden" value="<%= @loa.payorlinkone_loe_no %>" id="loe_no">
+      <%= if String.upcase(@loa.coverage) == "PEME" do %>
+
+        <span class="info-title">Availment Date</span>
+        <p>
+          <div class="text" id="modal_admission_date"><%= to_date(peme_local_date) %></div>
+        </p>
+
+        <span class="info-title">Packages</span>
+        <p>
+          <%= for loa_package <- @loa.loa_packages do %>
+            <div class="fs-16"><%= loa_package.code %> - <span class="dim thin"><%= loa_package.description %></span></div>
+          <% end %>
+        </p>
+
+        <span class="info-title">Procedures</span>
+        <div class="ui grid">
+          <div class="one wide column"></div>
+          <div class="fourteen wide column">
+            <table class="ui table">
+              <thead>
+                <tr>
+                  <th>Standard CPT Code</th>
+                  <th>Standard CPT Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for loa_procedure <- @loa.loa_procedures do %>
+                  <tr>
+                    <td><%= loa_procedure.procedure_code %></td>
+                    <td><%= loa_procedure.procedure_description %></td>
+                  </tr>
+                <% end %>
+
+                <%= if Enum.empty?(@loa.loa_procedures) do %>
+                  <tr>
+                    <td colspan="2">No Procedures</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </head>
+          </table>
+        </div>
+        <div class="one wide column"></div>
+      </div>
+        <%= if Enum.empty?(@loa.loa_procedures) do %>
+          No Procedures
+        <% end %>
+      <% end %>
+      <div class="title mt-2">Total</div>
+      <div class="text">Php. <%= if is_nil(@loa.total_amount) do 0.00 else @loa.total_amount |> Decimal.round(2) end %></div>
+
+      <div class="actions">
+        <div class="ui container">
+          <div class="ui grid">
+            <div class="row">
+              <div class="eight wide column">
+                <button class="big ui basic deny button fluid button-no" type="button"><i class="remove icon"></i>No</button>
+              </div>
+              <div class="eight wide column">
+                <button class="big ui primary button fluid" type="button" id="cancel"><i class="checkmark icon"></i>Yes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hide" id="cancel_success_modal">
+  <i class="close icon"></i>
+  <div class="scrolling content">
+    <div class="text-center">
+      <?xml version="1.0" encoding="UTF-8"?>
+      <svg width="84px" height="84px" viewBox="0 0 84 84" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+        <title>success</title>
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="LOA-Request-Successful" transform="translate(-567.000000, -152.000000)" fill-rule="nonzero" fill="#60DD3C">
+        <g id="success" transform="translate(567.000000, 152.000000)">
+        <path d="M42,0 C18.8418462,0 0,18.8402308 0,42 C0,65.1597692 18.8418462,84 42,84 C65.1581538,84 84,65.1597692 84,42 C84,18.8402308 65.1581538,0 42,0 Z M42,80.7692308 C20.6236154,80.7692308 3.23076923,63.3763846 3.23076923,42 C3.23076923,20.6236154 20.6236154,3.23076923 42,3.23076923 C63.3763846,3.23076923 80.7692308,20.6236154 80.7692308,42 C80.7692308,63.3763846 63.3763846,80.7692308 42,80.7692308 Z" id="Shape"></path>
+        <path d="M61.7916923,24.7735385 L36.9648462,52.7035385 L22.008,40.7383846 C21.3133846,40.1810769 20.2940769,40.2957692 19.7383846,40.9903846 C19.1810769,41.6882308 19.2941538,42.7043077 19.9903846,43.2616154 L36.1442308,56.1846923 C36.4414615,56.4221538 36.7984615,56.5384615 37.1538462,56.5384615 C37.5996923,56.5384615 38.0439231,56.3543077 38.3621538,55.9956923 L64.2083077,26.9187692 C64.8011538,26.2532308 64.7413846,25.2306923 64.0742308,24.6394615 C63.4054615,24.045 62.3861538,24.1047692 61.7916923,24.7735385 Z" id="Shape"></path>
+        </g>
+        </g>
+        </g>
+      </svg>
+      <p class="success-message success-message--title mt-2">LOA Cancellation Successful</p>
+    </div>
+    <div class="modal-content mt-4">
+      <%= if String.upcase(@loa.coverage) == "PEME" do %>
+
+          <span class="info-title">Availment Date</span>
+        <p>
+          <div class="text" id="modal_admission_date"><%= to_date(peme_local_date) %></div>
+        </p>
+
+        <span class="info-title">Packages</span>
+        <p>
+          <%= for loa_package <- @loa.loa_packages do %>
+            <div class="fs-16"><%= loa_package.code %> - <span class="dim thin"><%= loa_package.description %></span></div>
+          <% end %>
+        </p>
+
+        <span class="info-title">Procedures</span>
+        <div class="ui grid">
+          <div class="one wide column"></div>
+          <div class="fourteen wide column">
+            <table class="ui table">
+              <thead>
+                <tr>
+                  <th>Standard CPT Code</th>
+                  <th>Standard CPT Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for loa_procedure <- @loa.loa_procedures do %>
+                  <tr>
+                    <td><%= loa_procedure.procedure_code %></td>
+                    <td><%= loa_procedure.procedure_description %></td>
+                  </tr>
+                <% end %>
+
+                <%= if Enum.empty?(@loa.loa_procedures) do %>
+                  <tr>
+                    <td colspan="2">No Procedures</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </head>
+          </table>
+        </div>
+        <div class="one wide column"></div>
+      </div>
+    <% end %>
+      <div class="title mt-2">Total</div>
+      <div class="text">Php. <%= if is_nil(@loa.total_amount) do 0.00 else @loa.total_amount |> Decimal.round(2) end %></div>
+      <div class="actions">
+        <div class="ui container">
+          <div class="ui grid">
+            <div class="row">
+              <div class="sixteen wide column">
+                <button class="big ui button fluid primary deny" type="button" id="success_close"><i class="checkmark icon"></i>Okay</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hide" id="cancel_fail_modal">
+  <i class="close icon"></i>
+  <div class="scrolling content">
+    <div class="text-center">
+      <?xml version="1.0" encoding="UTF-8"?>
+      <svg width="84px" height="84px" viewBox="0 0 84 84" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <!-- Generator: Sketch 46.2 (44496) - http://www.bohemiancoding.com/sketch -->
+        <title>error(1)</title>
+        <desc>Created with Sketch.</desc>
+        <defs></defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="LOA-Cancellation-Failed-" transform="translate(-598.000000, -152.000000)" fill-rule="nonzero" fill="#E75042">
+        <g id="error(1)" transform="translate(598.000000, 152.000000)">
+        <path d="M42,0 C18.8418462,0 0,18.8402308 0,42 C0,65.1597692 18.8418462,84 42,84 C65.1581538,84 84,65.1597692 84,42 C84,18.8402308 65.1581538,0 42,0 Z M42,80.7692308 C20.6236154,80.7692308 3.23076923,63.3763846 3.23076923,42 C3.23076923,20.6236154 20.6236154,3.23076923 42,3.23076923 C63.3763846,3.23076923 80.7692308,20.6236154 80.7692308,42 C80.7692308,63.3763846 63.3763846,80.7692308 42,80.7692308 Z" id="Shape"></path>
+        <path d="M57.6805385,26.3194615 C57.0489231,25.6878462 56.028,25.6878462 55.3963846,26.3194615 L42,39.7158462 L28.6036154,26.3194615 C27.972,25.6878462 26.9510769,25.6878462 26.3194615,26.3194615 C25.6878462,26.9510769 25.6878462,27.972 26.3194615,28.6036154 L39.7158462,42 L26.3194615,55.3963846 C25.6878462,56.028 25.6878462,57.0489231 26.3194615,57.6805385 C26.6344615,57.9955385 27.048,58.1538462 27.4615385,58.1538462 C27.8750769,58.1538462 28.2886154,57.9955385 28.6036154,57.6805385 L42,44.2841538 L55.3963846,57.6805385 C55.7113846,57.9955385 56.1249231,58.1538462 56.5384615,58.1538462 C56.952,58.1538462 57.3655385,57.9955385 57.6805385,57.6805385 C58.3121538,57.0489231 58.3121538,56.028 57.6805385,55.3963846 L44.2841538,42 L57.6805385,28.6036154 C58.3121538,27.972 58.3121538,26.9510769 57.6805385,26.3194615 Z" id="Shape"></path>
+        </g>
+        </g>
+        </g>
+      </svg>
+      <p class="success-message success-message--title mt-2">LOA Cancellation Failed</p>
+      <p class="success-message success-message--text mt-2">There has been an error cancelling LOA.</p>
+    </div>
+    <div class="modal-content mt-4">
+      <%= if String.upcase(@loa.coverage) == "ACU" do %>
+        <span class="info-title">Packages</span>
+        <p>
+          <%= for loa_package <- @loa.loa_packages do %>
+            <div class="fs-16"><%= loa_package.code %> - <span class="dim thin"><%= loa_package.description %></span></div>
+          <% end %>
+        </p>
+
+        <span class="info-title">Procedures</span>
+        <div class="ui grid">
+          <div class="one wide column"></div>
+          <div class="fourteen wide column">
+            <table class="ui table">
+              <thead>
+                <tr>
+                  <th>Standard CPT Code</th>
+                  <th>Standard CPT Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <%= for loa_procedure <- @loa.loa_procedures do %>
+                  <tr>
+                    <td><%= loa_procedure.procedure_code %></td>
+                    <td><%= loa_procedure.procedure_description %></td>
+                  </tr>
+                <% end %>
+
+                <%= if Enum.empty?(@loa.loa_procedures) do %>
+                  <tr>
+                    <td colspan="2">No Procedures</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </head>
+          </table>
+        </div>
+        <div class="one wide column"></div>
+      </div>
+    <% end %>
+    <div class="title mt-2">Total</div>
+    <div class="text">Php. <%= if is_nil(@loa.total_amount) do 0.00 else @loa.total_amount |> Decimal.round(2) end %></div>
+    <div class="actions">
+      <div class="ui container">
+        <div class="ui grid">
+          <div class="row">
+            <div class="sixteen wide column">
+              <button class="big ui button fluid primary deny" type="button"><i class="checkmark icon"></i>Okay</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<input type="hidden" id="session" value="<%= @session %>">
+
+<div class="ui modal-main tiny modal" id="confirmation_peme_vloa_modal">
+  <div class="scrolling content">
+    <div class="text-center">
+      <input type="hidden" id="confirm_result">
+      <p class="success-message success-message--title mt-2">Are you sure you want to submit this for payment?</p>
+    </div>
+    <div class="modal-content mt-4">
+      <div class="ui container">
+        <div class="ui grid">
+          <div class="row">
+            <div class="eight wide column">
+              <button class="big ui basic deny button fluid" type="button"  id="loa_verify_confirm_no"><i class="remove icon"></i>No</button>
+            </div>
+            <div class="eight wide column">
+              <button class="big ui primary button fluid" type="button" id="loa_verify_confirm_yes"><i class="checkmark icon"></i>Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

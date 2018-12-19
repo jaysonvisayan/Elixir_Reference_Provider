@@ -1,0 +1,106 @@
+<div class="ui container" role="register_user">
+  <div class="ui grid" id="register_form">
+    <div class="row">
+      <div class="sixteen wide column">
+        <h2>User Registration</h2>
+        <p>Enter user's details to complete the registration process.</p>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Single registration -->
+      <div class="twelve wide computer twelve wide tablet sixteen wide mobile column">
+        <%= form_for @changeset, agent_path(@conn, :create), [as: :agent], fn f -> %>
+          <div class="ui form">
+            <div class="ui grid">
+              <div class="row">
+                <div class="eight wide column field">
+                  <%= label f, :first_name, "First Name" %>
+                  <%= text_input f, :first_name, placeholder: "Enter your first name", autofocus: "" %>
+                  <p style="color: red"><%= error_tag f, :first_name %></p>
+                </div>
+
+                <div class="eight wide column field">
+                  <label>Middle Name <i>(optional)</i><label>
+                      <%= text_input f, :middle_name, placeholder: "Enter your middle name" %>
+                      <p style="color: red"><%= error_tag f, :middle_name %></p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="eight wide column field">
+                  <%= label f, :last_name, "Last Name" %>
+                  <%= text_input f, :last_name, placeholder: "Enter your last name" %>
+                  <p style="color: red"><%= error_tag f, :last_name %></p>
+                </div>
+
+                <div class="eight wide column field">
+                  <label>Extension <i>(optional)</i><label>
+                      <%= text_input f, :extension, placeholder: "Enter your extension" %>
+                      <p style="color: red"><%= error_tag f, :extension %></p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="sixteen wide column field">
+                  <%= label f, :provider_id, "Provider" %>
+                  <%= select f, :provider_id, filter_providers(@providers), placeholder: "Select provider", class: "ui fluid search selection dropdown" %>
+                  <p style="color: red"><%= error_tag f, :provider_id %></p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="eight wide column field">
+                  <%= label f, :department, "Department" %>
+                  <%= text_input f, :department, placeholder: "Enter your department" %>
+                  <p style="color: red"><%= error_tag f, :department %></p>
+                </div>
+
+                <div class="eight wide column field">
+                  <%= label f, :role, "Role" %>
+                  <!-- convert to drop down once integrated with adminlink-->
+                  <%= text_input f, :role, placeholder: "Enter your role" %>
+                  <p style="color: red"><%= error_tag f, :role %></p>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="eight wide column field">
+                  <%= label f, :mobile, "Mobile Number" %>
+                  <%= text_input f, :mobile, placeholder: "Enter your mobile", role: "mask", class: "mobile_mask" %>
+                  <p style="color: red"><%= error_tag f, :mobile %></p>
+                </div>
+
+                <div class="eight wide column field">
+                  <%= label f, :email, "Email Address" %>
+                  <%= text_input f, :email, placeholder: "Enter your email" %>
+                  <p style="color: red"><%= error_tag f, :email %></p>
+                </div>
+              </div>
+              <input type="hidden" id="mobiles" value="<%= @mobiles %>">
+              <input type="hidden" id="emails" value="<%= @emails %>">
+
+              <div class="row">
+                <div class="eight wide column">
+                  <button type="submit" class="ui fluid large primary submit button">Continue</button>
+                </div>
+                <div class="eight wide column">
+                  <a href="/sign_in" class="ui fluid large basic primary button">Cancel</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <!-- batch registration-->
+    <div class="six wide computer eight wide tablet sixteen wide mobile column">
+    </div>
+  </div>
+</div>
+
+<%= if assigns[:registration] == "successful" do %>
+  <%= render "register_successful_modal.html" %>
+<% end %>
+<%= if assigns[:registration] == "failed" do %>
+  <%= render "register_failed_modal.html" %>
+<% end %>

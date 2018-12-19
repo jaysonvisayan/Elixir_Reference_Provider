@@ -1,0 +1,95 @@
+@import '../variables';
+table {
+    &.small-table,
+    &.ui.celled.table.big-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    &.small-table thead,
+    &.ui.celled.table.big-table thead,
+    &.small-table tbody,
+    &.ui.celled.table.big-table tbody {
+        border-bottom: 1px solid $gray_2;
+    }
+    &.small-table thead tr th,
+    &.ui.celled.table.big-table thead tr th,
+    &.small-table tbody tr th,
+    &.ui.celled.table.big-table tbody tr th {
+        color: $gray;
+        font-weight: 300;
+        text-align: left;
+        padding: 0.5rem 0;
+    }
+    &.small-table thead tr,
+    &.ui.celled.table.big-table thead tr,
+    &.small-table tbody tr,
+    &.ui.celled.table.big-table tbody tr {
+        border-bottom: 1px solid $gray_2;
+    }
+    &.small-table thead tr td,
+    &.ui.celled.table.big-table thead tr td,
+    &.small-table tbody tr td,
+    &.ui.celled.table.big-table tbody tr td {
+        padding: 0.5rem 0;
+    }
+}
+
+table.ui.celled.table.big-table {
+    thead tr th {
+        text-transform: uppercase;
+        font-weight: normal;
+        &:first-of-type {
+            padding-left: 1rem;
+        }
+        a {
+            color: $gray;
+        }
+    }
+    tbody tr {
+        &:nth-child(2n) {
+            background-color: $white;
+        }
+        &:nth-child(2n+1) {
+            background-color: #F9F9F9;
+        }
+        td {
+            padding: 1rem 0;
+            &:first-of-type {
+                padding-left: 1rem;
+            }
+            &:last-of-type {
+                padding-right: 1rem;
+            }
+        }
+    }
+    img {
+        height: 1.5rem;
+    }
+    .tag {
+        width: 100px;
+    }
+}
+
+table {
+    &.small-table img,
+    &.ui.celled.table.big-table img {
+        height: 1rem;
+    }
+    &.small-table tbody tr:hover,
+    &.ui.celled.table.big-table tbody tr:hover {
+        background-color: #F5F9FE;
+    }
+}
+
+.ui {
+    &.celled.table {
+        border: none;
+        tr {
+            th,
+            td {
+                border: none;
+                background: none;
+            }
+        }
+    }
+}

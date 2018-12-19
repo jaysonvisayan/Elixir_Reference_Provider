@@ -1,0 +1,23 @@
+<div class="ui modal" id="validate_member_account">
+  <i class="close icon"></i>
+  <div class="header">Please select member</div>
+  <div class="content">
+    <p id="append_validation"></p>
+    <div class="ui grid">
+      <div class="sixteen wide tablet sixteen wide computer column">
+        <div id="message" class="ui negative message" style="display: none">
+        </div>
+        <div class="ui grid" id="member_append">
+        </div>
+      </div>
+    </div>
+    <%# Content End %>
+  </div>
+  <div class="actions">
+    <button class="ui primary button" type="button" id="redirect_mobile">Select</button>
+  </div>
+
+</div>
+<input type="hidden" id="status">
+<input type="hidden" id="memberID">
+<input type="hidden" id="member_remarks">

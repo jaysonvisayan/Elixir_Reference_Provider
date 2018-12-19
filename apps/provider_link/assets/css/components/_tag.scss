@@ -1,0 +1,39 @@
+@import '../variables';
+.tag {
+    border-radius: 20px;
+    border: 1px solid;
+    padding: 2px 6px;
+    font-size: 10px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.tag--orange {
+    color: $orange;
+    border-color: $orange;
+}
+
+.tag--green {
+    color: $green;
+    border-color: $green;
+}
+
+.tag--red {
+    color: $red;
+    border-color: $red;
+}
+
+.tag--black {
+    color: $black_3;
+    border-color: $black_3;
+}
+
+.tag--blue {
+    color: $blue;
+    border-color: $blue;
+}
+
+.tag--violet {
+    color: $violet;
+    border-color: $violet;
+}

@@ -1,0 +1,20 @@
+<div class="ui container">
+  <div class="row">
+    <div class="column">
+      <div></div>
+       <div class="ui ordered two steps">
+        <div class="disabled step">
+          <div class="content">
+            <div class="title">Validate Member</div>
+          </div>
+        </div>
+        <div class="active step">
+          <div class="content">
+            <div class="title">Pre-Employment Medical Examination Application Form</div>
+          </div>
+        </div>
+      </div>
+      <%= render "validate_member_form.html", member: @member, changeset: @changeset, conn: @conn, action: loa_path(@conn, :request_peme, @member) %>
+    </div>
+  </div>
+</div>

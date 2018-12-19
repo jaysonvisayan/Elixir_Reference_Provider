@@ -1,0 +1,13 @@
+<%= if assigns[:valid] do %>
+  <div class="hide" id="security_modal_no_session"></div>
+  <input type="hidden" id="coverage">
+  <input type="hidden" id="paylink_user_id" value="<%= @paylink_user_id %>">
+  <input type="hidden" id="member_attempts" value="<%= @attempts %>">
+  <input type="hidden" id="authentication_code" value="<%= @code %>">
+  <%= render ProviderLinkWeb.PageView, "modal_security.html", paylink_user_id: @paylink_user_id, card_no: @card_no %>
+  <%= render ProviderLinkWeb.PageView, "modal_selection.html", paylink_user_id: @paylink_user_id %>
+  <%= render ProviderLinkWeb.PageView, "modal_upload_government_id.html", conn: @conn, paylink_user_id: @paylink_user_id %>
+  <%= render ProviderLinkWeb.PageView, "modal_capture_image.html", conn: @conn, paylink_user_id: @paylink_user_id %>
+  <%= render ProviderLinkWeb.PageView, "modal_facial_image.html", conn: @conn, paylink_user_id: @paylink_user_id %>
+  <%= render ProviderLinkWeb.PageView, "modal_facial_capture.html", conn: @conn, paylink_user_id: @paylink_user_id, code: @code %>
+<% end %>

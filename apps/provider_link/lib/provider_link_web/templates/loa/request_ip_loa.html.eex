@@ -1,0 +1,197 @@
+<div class="ui container">
+
+  <div class="ui grid">
+    <div class="row">
+      <div class="sixteen wide tablet column">
+        <span class="info-title">New Request</span>
+        <span class="bold fs-20">Request IP LOA</span>
+      </div>
+    </div>
+  </div>
+
+  <form class="ui form">
+    <div class="ui grid">
+
+      <div class="row">
+
+        <div class="six wide computer eight wide tablet sixteen wide mobile column">
+          <div class="field">
+            <label class="label-title">Admission Date</label>
+            <div class="ui calendar" id="birthDate">
+              <div class="ui input left icon">
+                <i class="calendar icon"></i>
+                <input type="text" placeholder="Admission Date">
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Room Entitlement</label>
+            <select class="ui fluid dropdown">
+              <option value="">Semi-Private</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label-title">Room Rate</label>
+            <select class="ui fluid dropdown">
+              <option value="">Select Room Rate</option>
+              <option value="500">$500</option>
+              <option value="1000">$1000</option>
+              <option value="1500">$1500</option>
+              <option value="2000">$2000</option>
+            </select>
+          </div>
+          <div class="field">
+            <label class="label-title" for="procedure-type">Procedure Type</label>
+            <div class="two fields">
+              <div class="field mobile-width">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="procedure-type" tabindex="0" class="hidden">
+                  <label>Elective</label>
+                </div>
+              </div>
+              <div class="field mobile-width">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="procedure-type" tabindex="0" class="hidden">
+                  <label>Non-Elective</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Procedure date (upto 7 days from today)</label>
+            <div class="ui calendar" id="procedureDate">
+              <div class="ui input left icon">
+                <i class="calendar icon"></i>
+                <input type="text" placeholder="Procedure Date">
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title" for="procedure-type">CP Clearance</label>
+            <div class="two fields">
+              <div class="field mobile-width">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="cp_clearance" tabindex="0" class="hidden">
+                  <label>Required</label>
+                </div>
+              </div>
+              <div class="field mobile-width">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="cp_clearance" tabindex="0" class="hidden">
+                  <label>Not Required</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title" for="procedure-type">CP Clearance Completed</label>
+            <div class="two fields">
+              <div class="field mobile-width">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="cp_clearance_completed" tabindex="0" class="hidden">
+                  <label>Yes</label>
+                </div>
+              </div>
+              <div class="field mobile-width">
+                <div class="ui radio checkbox">
+                  <input type="radio" name="cp_clearance_completed" tabindex="0" class="hidden">
+                  <label>No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Completed CP clearance (optional)</label>
+            <input type="file" name="upload-lab-order" id="upload-lab-order" class="hide">
+            <div class="ui basic icon large buttons upload-order">
+              <label class="ui button" for="upload-lab-order"><span class="tablet-only">Upload Completed CP clearance</span><span class="mobile-only">Upload File</span> <i class="upload icon"></i></label>
+              <label class="ui button"><i class="photo icon"></i></label>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Doctor's Lab Order</label>
+            <input type="file" name="upload-lab-order" id="upload-lab-order" class="hide">
+            <div class="ui basic icon large buttons upload-order">
+              <label class="ui button" for="upload-lab-order"><span class="tablet-only">Upload Doctor's Lab order</span> <span class="mobile-only">Upload Lab Order</span> <i class="upload icon"></i></label>
+              <label class="ui button"><i class="photo icon"></i></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="six wide computer eight wide tablet sixteen wide mobile column mobile-mt-2">
+          <div class="field">
+            <label class="label-title">Admitting Physician</label>
+            <input type="text" name="admitting_physician" placeholder="Enter admitting physician">
+          </div>
+          <div class="field">
+            <label class="label-title">Admitting Impression</label>
+            <input type="text" name="admitting_impression" placeholder="Enter admitting impression">
+          </div>
+          <div class="field">
+            <label class="label-title">Other Physician (optional)</label>
+            <div class="fields">
+              <div class="thirteen wide field">
+                <select class="ui fluid dropdown">
+                  <option value="">Enter other physician</option>
+                  <option value="500">$500</option>
+                  <option value="1000">$1000</option>
+                  <option value="1500">$1500</option>
+                  <option value="2000">$2000</option>
+                </select>
+              </div>
+              <div class="three wide field">
+                <button class="ui basic button plus mobile-mt-1"><span class="mobile-only mr-1">Add Physician</span>+</button>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Estimated length of stay</label>
+            <input type="text" name="length_of_stay" placeholder="7 days">
+          </div>
+          <div class="field">
+            <label class="label-title">Estimated date of discharge</label>
+            <p class="discharge-date">16th June, 2017</p>
+          </div>
+          <div class="field">
+            <label class="label-title">Procedure (optional)</label>
+            <div class="fields">
+              <div class="thirteen wide field">
+                <input type="text" name="procedure" placeholder="Enter procedure">
+              </div>
+              <div class="three wide field">
+                <button class="ui basic button plus mobile-mt-1"><span class="mobile-only mr-1">Add Procedure</span>+</button>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Surgical Procedure (optional)</label>
+            <div class="fields">
+              <div class="thirteen wide field">
+                <input type="text" name="surgical_procedure" placeholder="Enter surgical procedure">
+              </div>
+              <div class="three wide field">
+                <button class="ui basic button plus mobile-mt-1"><span class="mobile-only mr-1">Add Procedure</span>+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="six wide computer eight wide tablet sixteen wide mobile column">
+          <button class="large ui button fluid mt-0" type="submit">Proceed</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="eight wide tablet sixteen wide mobile column">
+          <a href=""><p class="cancel pt-0">Cancel and go back</p></a>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
+</div>

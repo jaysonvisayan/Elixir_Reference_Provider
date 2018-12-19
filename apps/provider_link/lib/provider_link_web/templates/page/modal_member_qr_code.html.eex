@@ -1,0 +1,30 @@
+<%= if assigns[:paylink_user_id] do %>
+<div id="modal_option_qr_no_session" class="ui tiny modal">
+  <% else %>
+<div id="modal_option_qr" class="ui tiny modal">
+    <i class="close icon"></i>
+  <% end %>
+  <div class="content new-method-wrapper mt-4 text-center">
+    <div class="fs-20 bold mb-2 text-center">Scan QR Code</div>
+    <div class="text-center ui subheader">Please scan the QR code of the eVoucher.</div>
+    <div class="ui centered small image"><img src="/images/qrcode.png"></div>
+    <input type="hidden" name="new_link" id="new_link" value=""></input>
+    <div class="ui centered grid">
+      <div class="six wide tablet eight wide computer column ui mod-center-align">
+        <button type="button" class="ui centered button" id="verify">SCAN</button>
+      </div>
+    </div>
+    <div class="new-method-wrapper mt-4 text-center">
+      <a style="cursor: pointer" id="choose_other_options_qr">
+        <p class="new-method-title">Member doesn't have the QR code now?</p>
+        <p class="new-method-title"><b>Try another method</b></p>
+        <div class="mt-3">
+          <p class="new-method-content">Scan QR Code of eVoucher to continue<br/></p>
+        </div>
+      </a>
+    </div>
+  </div>
+  <%= if assigns[:paylink_user_id] do %>
+    <a href="http://paylinkapiuat.medilink.com.ph/LOA.aspx" class="ui fluid large basic primary button">Back</a>
+  <% end %>
+</div>

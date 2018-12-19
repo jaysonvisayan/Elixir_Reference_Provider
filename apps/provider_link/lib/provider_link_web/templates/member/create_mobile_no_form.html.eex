@@ -1,0 +1,27 @@
+<div class="ui container" role="member-mobile-validate">
+  <div id="create_mobile_no_form" class="ui">
+    <%= form_for @changeset, member_path(@conn, :create_mobile_no, @member), [as: :member, class: "ui form", multipart: :true], fn f -> %>
+    <%= hidden_input f, :member_type, value: @member.type %>
+    <%= hidden_input f, :member_id, value: @member.payorlink_member_id%>
+    <%= hidden_input f, :current_mobile, value: @member.mobile %>
+    <div class="scrolling content">
+      <div class="fs-20 bold mb-2 text-center">Register  Contact Information</div>
+      <div class="ui centered grid">
+        <div class="ten wide column field">
+          <%= label f, :mobile, "Mobile No" %>
+          <div class="ui fluid input regex-field">
+            <%= text_input f, :mobile, class: "mobile_mask", placeholder: "Enter Mobile No", role: "mask" %>
+          </div>
+        </div>
+        <div class="ten wide column">
+          <div class="ui grid">
+            <div class="sixteen wide column">
+              <button type="submit" id="create_mobile_no" class="ui fluid primary button" id="verify">Register</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  </div>
+</div>

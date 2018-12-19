@@ -1,0 +1,21 @@
+@import '../variables';
+.ui.header {
+    color: #838383;
+    font-weight: 600;
+    font-size: 2rem;
+}
+.ui.subheader {
+    color: #838383;
+    font-weight: 550;
+    font-size: 1rem;
+}
+.ui.mini.subheader{
+	padding: 1rem;
+	color: #838383;
+    font-weight: 550;
+    font-size: 0.8rem;	
+}
+.ui.mod-center-align{
+    vertical-align: middle !important;
+    text-align: center !important;
+}

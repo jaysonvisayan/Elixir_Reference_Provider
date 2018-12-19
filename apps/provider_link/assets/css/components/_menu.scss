@@ -1,0 +1,16 @@
+@import '../variables';
+.ui {
+    &.tab.active {
+        border: none;
+    }
+    &.tabular.menu .item {
+        text-transform: uppercase;
+        &.active {
+            color: $brand_color;
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}

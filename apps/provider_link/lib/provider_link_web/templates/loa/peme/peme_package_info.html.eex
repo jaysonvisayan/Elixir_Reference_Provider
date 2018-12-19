@@ -1,0 +1,219 @@
+<div class="ui container" role="peme-loa-validation">
+  <div class="ui grid" id="#">
+    <div class="row">
+      <div class="sixteen wide column">
+        <h2>View Package Information</h2>
+      </div>
+    </div>
+    <div class="row">
+       <%# 1st row %>
+       <div class="eleven wide computer twelve wide tablet sixteen wide mobile column">
+        <%= form_for @changeset, loa_path(@conn, :submit_loa_peme, @loa.id, "PEME"), [id: "loa", as: :loa], fn f -> %>
+          <div class="ui form">
+            <div class="ui grid">
+              <div class="row">
+                <div class="sixteen wide column">
+                  <h4><%= label f, :package, "Packages" %></h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="sixteen wide column">
+                  <table role="" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th>Package Code</th>
+                        <th>Package Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><%= @peme_details["package"]["code"]%></td>
+                        <td><%= @peme_details["package"]["name"]%></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="ui divider"></div>
+
+              <div class="row">
+                <div class="sixteen wide column">
+                  <h4><%= label f, :procedure, "Procedures" %></h4>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="sixteen wide column">
+                  <table role="" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+                    <thead>
+                      <tr>
+                        <th>CPT Code</th>
+                        <th>CPT Description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%= if is_nil(@peme_details["payor_procedure"]) or Enum.empty?(@peme_details["payor_procedure"]) do %>
+                        <tr>
+                          <td colspan="2" style="text-align:center;">No Record found!</td>
+                        </tr>
+                      <% else %>
+                        <%= for procedure <- @peme_details["payor_procedure"] do %>
+                          <tr>
+                            <td><%=procedure["code"]%></td>
+                            <td><%=procedure["description"]%></td>
+                          </tr>
+                        <% end %>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div class="ui divider"></div>
+
+
+            </div>
+          </div>
+      </div>
+
+      <div class="five wide computer twelve wide tablet sixteen wide mobile right floated column">
+        <div class="row">
+          <div class="row">
+            <div class="sixteen wide column">
+              <div class="fs-20 bold mb-2 text-center">Member</div>
+            </div>
+          </div>
+
+          <div class="ui centered cards">
+            <div class="card info-card">
+              <div class="content">
+                <div class="header">
+                  <span class="icon-hospital"></span>
+                  <span class="name" loa="name"></span>
+                  <br/>
+                  <span class="code" loa="code"></span>
+                </div>
+                <div class="description">
+                  <table class="ui very basic table">
+                    <tr>
+                      <td><span class="icon-location bold mr-1">Name: </span></td>
+                      <td><span class="line1"><%=Enum.join([@loa.member_last_name, ", ", @loa.member_first_name, " ", @loa.member_middle_name]) %></span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="icon-location bold mr-1">Birthdate: </span></td>
+                      <td><span class="line1"><%=@loa.member_birth_date%></span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="icon-location bold mr-1">Age: </span></td>
+                      <td><span class="line1"><%=age(@loa.member_birth_date)%></span></td>
+                    </tr>
+                    <tr>
+                      <td><span class="icon-location bold mr-1">Gender: </span></td>
+                      <td><span class="line1"><%= @loa.member_gender %></span></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+          </br>
+
+          <div class="row">
+            <div class="row">
+              <div class="sixteen wide column">
+                <div class="fs-20 bold mb-2 text-center">Fees</div>
+              </div>
+            </div>
+
+            <div class="ui centered disabled cards">
+              <div class="card info-card">
+                <div class="content">
+                  <div class="header">
+                    <span class="icon-hospital"></span>
+                    <span class="name" cpt="name"></span>
+                    <br/>
+                    <span class="code" cpt="code"></span>
+                  </div>
+                  <div class="description">
+                    <table class="ui very basic table">
+                      <tr>
+                        <td>
+                          <span class="icon-location bold mr-1">Basic: </span>
+                        </td>
+                        <td>
+                          <span class="line1">Php <%= amount(@peme_details["package_facility_rate"]) %></span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><span class="icon-location bold mr-1">Payor Pays: </span></td>
+                        <td>
+                          <span class="line1">Php <%= amount(@peme_details["payor_pays"]) %></span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><span class="icon-location bold mr-1">Total: </span></td>
+                        <td>
+                          <span class="line1">Php <%= amount(@peme_details["package_facility_rate"]) %></span>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- batch registration-->
+      <div class="eight wide computer eight wide tablet sixteen wide mobile column">
+        <div class="eight wide column">
+          <a href="/" class="ui large basic submit button"><i class="left chevron icon"></i>Back</a>
+        </div>
+      </div>
+      <div class="seven wide computer eight wide tablet sixteen wide mobile column">
+        <div class="seven wide right floated column">
+          <a href="#!" class="ui large primary submit right floated button" id="btn_submit"><i class="send icon"></i>Submit</a>
+        </div>
+      </div>
+
+      <!-- hidden parameters -->
+      <%= hidden_input f, :card_no, value: if is_nil(@loa.member_card_no) == false, do: @loa.member_card_no %>
+      <%= hidden_input f, :member_id, value: @loa.payorlink_member_id%>
+      <%= hidden_input f, :verification_type, value: @peme_details["verification_type"] %>
+      <%= hidden_input f, :amount, value: @peme_details["package_facility_rate"] %>
+      <%= hidden_input f, :loa_id, value: @loa.id %>
+      <%= hidden_input f, :authorization_id, value: @loa.payorlink_authorization_id%>
+      <%= if assigns[:paylink_user_id] do %>
+        <input type="hidden" name="loa[paylink_user_id]" value="<%= @paylink_user_id %>">
+      <% end %>
+    <% end %>
+    </div>
+  </div>
+</div>
+
+<input type="hidden" id="session" value="yes">
+<%# <%= render "package_modal_cancel.html", loa: @loa, user: @user %>
+<div class="ui modal-main tiny modal" id="confirmation_loa_modal">
+  <div class="scrolling content">
+    <div class="text-center">
+      <input type="hidden" id="confirm_result">
+      <p class="success-message success-message--title mt-2">Are you sure you want to submit this for payment?</p>
+    </div>
+    <div class="modal-content mt-4">
+      <div class="ui container">
+        <div class="ui grid">
+          <div class="row">
+            <div class="eight wide column">
+              <button class="big ui basic deny button fluid" type="button"  id="loa_peme_confirm_no"><i class="remove icon"></i>No</button>
+            </div>
+            <div class="eight wide column">
+              <button class="big ui primary button fluid" type="button" id="loa_peme_confirm_yes"><i class="checkmark icon"></i>Yes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

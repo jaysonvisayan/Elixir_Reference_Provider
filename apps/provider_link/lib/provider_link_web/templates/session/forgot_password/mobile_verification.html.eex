@@ -1,0 +1,65 @@
+<div class="twelve wide computer sixteen wide tablet sixteen wide mobile column" role="mobile_verification" id="mobile_verification">
+  <div class="ui middle aligned grid" id="mobile_verification_form">
+    <div class="ten wide mobile centered sixteen wide tablet column">
+      <%= form_for @changeset, session_path(@conn, :mobile_verification), [as: :session, class: "ui large form"], fn f -> %>
+      <div class="ui very padded segment segment-radius">
+
+          <h1>Verification</h1>
+          <p style="color:#black" class="mrg1T">This extra step verifies if it's really you trying to sign in.</p>
+
+        <br><br>
+        <div>
+          <label style="color:#696969">A text message with 6-digit verification code was just send to **** *** **<%= get_last_mobile_no(@user) %></label>
+        </div>
+        <input type="hidden" id="duration" value="<%= check_expiry(@user.pin_expires_at) %>" >
+        <input type="hidden" name="session[user_id]" value="<%= @user.id %>" >
+        <input type="hidden" name="pnumber_or_email" value='<%= @params["pnumber_or_email"] %>'' >
+        <br>
+          <div class="field ui input" id="verification">
+            <div class="ui labeled input">
+              <div class="ui label">
+                M -
+              </div>
+              
+              <input class="pin_mask" type="text" name="verification_code" placeholder="Enter verification code" role="mask">
+            </div>
+          </div>
+          
+          <%
+            info = get_flash(@conn, :info)
+            error = get_flash(@conn, :error)
+          %>
+
+          <%= if is_nil(error) == false do %>
+            <div id="message" class="ui negative message center aligned">
+              <%= error %>
+            </div>
+          <% end %>
+
+          <%= if info == "Resent" do %>
+            <div id="message" class="ui positive message center aligned">
+              Code Resent!
+            </div>
+          <% end %>
+          
+ 
+          <div class="field">
+            <button style="width: 50% ; margin-bottom: 5%" type="submit" class="ui fluid positive button" agentID="<%= @user.agent.id %>">Continue</button>
+          </div>
+      <% end %>
+          
+          <div id="resend" class="ui">
+            Didn't receive any code?
+            <%= form_for @changeset, session_path(@conn, :send_verification), [as: :session], fn f -> %>
+            <%= hidden_input f, :pnumber_or_email, value: @params["pnumber_or_email"] %>
+            <%= hidden_input f, :status, value: "Resent"%>
+            <button class="ui linkedin button mini" type="submit">Resend code now</button>
+           <%= end %>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+

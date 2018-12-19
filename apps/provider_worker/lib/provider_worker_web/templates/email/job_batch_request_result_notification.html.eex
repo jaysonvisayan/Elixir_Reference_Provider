@@ -1,0 +1,44 @@
+<p>Hi, All.</p>
+<p>Please see below the API result of the request from method <b><%= @job_stats.api_name %></b> with id <b><%= @job_stats.id %></b>.</p>
+<table border="1" cellpadding="5">
+  <tr bgcolor="#0996e8">
+    <th><strong><font color="white">COUNT</font></strong></th>
+    <th><strong><font color="white">NOT PROCESSED</font></strong></th>
+    <th><strong><font color="white">PROCESSED</font></strong></th>
+    <th><strong><font color="white">SUCCESS</font></strong></th>
+    <th><strong><font color="white">FAILED</font></strong></th>
+  </tr>
+  <tr>
+    <td><%= @job_stats.count %></td>
+    <td><%= @job_stats.not_processed %></td>
+    <td><%= @job_stats.processed %></td>
+    <td><%= @job_stats.success %></td>
+    <td><%= @job_stats.failed %></td>
+  </tr>
+</table>
+<br>
+<table border="1" cellpadding="5">
+  <tr bgcolor="#0996e8">
+    <th><strong><font color="white">#</font></strong></th>
+    <th><strong><font color="white">USERNAME</font></strong></th>
+    <th><strong><font color="white">SUCCESS</font></strong></th>
+    <th><strong><font color="white">REMARKS</font></strong></th>
+  </tr>
+  <%= for {job_status, index} <- Enum.with_index(@job.job_statuses, 1) do %>
+    <tr>
+      <td><%= index %></td>
+      <td><%= display_username(job_status.params) %></td>
+      <td><%= job_status.is_success %></td>
+      <td>
+        <%= for js_return <- job_status.return do %>
+          <%= js_return %><br>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<br>
+Best Regards,
+<br><br>
+<strong>Provider Admin</strong>
+<center><a href="https://www.medilink.com.ph/">Medilink Network</a>&copy; 2017</center>

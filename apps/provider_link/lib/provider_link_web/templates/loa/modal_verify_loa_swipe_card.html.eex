@@ -1,0 +1,30 @@
+<div id="modal_option_swipe_card" class="ui tiny modal" >
+  <i class="close icon"></i>
+  <div class="scrolling content">
+    <div class="fs-20 bold mb-2 text-center">Swipe Card</div>
+    <form class="ui form">
+      <div class="member-card-wrapper">
+        <div class="skew-bg"></div>
+        <p class="member-card-label mt-4">Swipe or Enter 16-digit card number</p>
+        <div class="ui input">
+          <input class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="cardno1" placeholder="_ _ _ _">
+          <input class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="cardno2" placeholder="_ _ _ _">
+          <input class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="cardno3" placeholder="_ _ _ _">
+          <input class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="cardno4" placeholder="_ _ _ _">
+          <input id="card" type="hidden">
+        </div>
+      </div>
+      <p role="append"></p>
+      <button type="button" class="ui fluid large primary button" id="verify_loa_swipe_card">Authenticate</button>
+    </form>
+    <div class="new-method-wrapper mt-4 text-center">
+      <a style="cursor: pointer" id="choose_other_options_swipe_card">
+        <p class="new-method-title">Member doesn't have a card now?</p>
+        <p class="new-method-title"><b>Try another method</b></p>
+        <div class="mt-3">
+          <p class="new-method-content">Enter Member's Card to continue <br/></p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

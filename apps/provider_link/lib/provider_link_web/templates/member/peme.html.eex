@@ -1,0 +1,54 @@
+<div class="ui container">
+<div class="ui equal width left aligned padded grid stackable" id="validate_member_peme">
+  <div class="row">
+    <div class="column">
+          <div class="ui ordered six steps">
+            <div class="active step">
+              <div class="content">
+                <div class="title">Validate Member</div>
+              </div>
+            </div>
+            <div class="disabled step">
+              <div class="content">
+                <div class="title">Pre-Employment Medical Examination Application Form</div>
+              </div>
+            </div>
+          </div>
+              <div class="ui one column centered grid">
+                <div class="column">
+                  <form class="ui form">
+                    <br /><br />
+                      <center><h3 class="member-card-title">ENTER E-VOUCHER NUMBER</h3></center>
+                      <p role="append"></p><br />
+                      <div class="field" id="evoucher_field">
+                      <div class="ui right fluid labeled input">
+                        <div class="ui label" tabindex="0">
+                          <div class="text" id="selected_type">PEME -</div>
+                          <div class="menu" tabindex="-1">
+                          </div>
+                        </div>
+                        <input class="member-voucher-number" id="evoucher" type="text" maxlength="6" placeholder="_ _ _ _ _ _">
+                      </div>
+                    </div>
+                  <div class="ui grid">
+                    <div class="four wide left aligned column">
+                      <a href="/" class="ui basic primary button"><i class="remove icon"></i>
+                        Cancel</a>
+                    </div>
+                    <div class="four wide column"></div>
+                    <div class="four wide column"></div>
+                    <div class="four wide right aligned column">
+                      <button class="ui primary button validate_button_submit" type="button"><i class="chevron check icon"></i>
+                        Validate</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="two column centered row">
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>

@@ -1,0 +1,58 @@
+<%= if is_nil(@loa) do %>
+404
+<% else %>
+<div class="ui container">
+  <div class="ui grid">
+    <div class="row">
+      <div class="sixteen wide column">
+        <p class="info-title">Member</p>
+        <%= if is_nil(@loa.member_middle_name) do %>
+          <p class="info-content"> <%= @loa.member_first_name  <> " " <> @loa.member_last_name%></p>
+        <% else %>
+          <p class="info-content"> <%= @loa.member_first_name  <> " " <> @loa.member_middle_name <> " " <> @loa.member_last_name%></p>
+        <% end %>
+      </div>
+      <p class="sixteen wide mobile only column"><a class="modal-open-main">View Member's Detailed Info</a></p>
+    </div>
+    <div class="row">
+      <div class="six wide computer eight wide tablet sixteen wide mobile column">
+        <p class="info-title">Request for Member</p>
+        <p class="info-content">Lab LOA Request</p>
+        <%= render "form_lab.html",
+          changeset: @changeset,
+          diagnoses: @diagnoses,
+          procedures: @procedures,
+          loa: @loa,
+          doctors: @doctors,
+          action: loa_path(@conn, :update_lab, @loa) %>
+                  <%= render "modal_diagnosis.html",
+          changeset: @changeset,
+          diagnoses: @diagnoses,
+          procedures: @procedures,
+          loa: @loa,
+          doctors: @doctors,
+          action: loa_path(@conn, :update_diagnosis, @loa) %>
+        <a href="/"><p class="cancel">Cancel and go back</p></a>
+
+      </div>
+      <div class="six wide computer only eight wide tablet only right floated column">
+        <div class="ui segment secondary">
+          <p class="segment-title">Member</p>
+          <%= if is_nil(@loa.member_middle_name) do %>
+          <p class="segment-content-bold"><%= @loa.member_last_name  <> ", " <> @loa.member_first_name %></p></p>
+          <% else %>
+          <p class="segment-content-bold"><%= @loa.member_last_name  <> ", " <> @loa.member_first_name <> " " <> @loa.member_middle_name%></p></p>
+          <% end %>
+          <p class="segment-content">Card no.: #<%= @loa.member_card_no %></p>
+          <p class="segment-content">DOB: <%= @loa.member_birth_date %></p>
+          <p class="segment-content">Age: <%= get_age(@loa.member_birth_date) %></p>
+          <p class="segment-content">Gender: <%= @loa.member_gender %></p>
+          <div class="segment-gap"></div>
+          <p class="segment-title">Provider</p>
+          <p class="segment-content-bold"><%= @loa.provider.name %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>

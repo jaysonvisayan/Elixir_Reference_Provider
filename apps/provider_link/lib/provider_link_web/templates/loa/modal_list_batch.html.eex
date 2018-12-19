@@ -1,0 +1,57 @@
+<div class="ui large modal" id="modal_list_batch">
+  <i class="close icon"></i>
+  <div class="header">
+    Add Existing Batch
+  </div>
+  <div class="content">
+    <%= form_for @conn, loa_path(@conn, :add_to_batch), [as: :loa_batch, class: "ui form", name: "add_to_batch"], fn f -> %>
+
+      <table class="ui selectable celled table big-table" role="datatable" style="width: 100%" id="batch_table">
+        <thead>
+          <tr>
+            <td class="bold dim">Batch no.</td>
+            <td class="bold dim">SOA Reference no.</td>
+            <td class="bold dim">Batch Type</td>
+            <td class="bold dim">Date Submitted</td>
+            <td class="bold dim">Status</td>
+          </tr>
+        </thead>
+
+
+        <tbody id="batch_body">
+          <%= for batch <- @batch do %>
+            <tr class="clickable row" style="cursor: pointer" id="batch_row" batch_number="<%= batch.number %>">
+              <td>
+                <div><%= batch.number %></div>
+              </td>
+              <td>
+                <div><%= batch.soa_reference_no %></div>
+              </td>
+              <td>
+                <div><%= batch.type %></div>
+              </td>
+              <td>
+                <%= if not is_nil(batch.inserted_at), do: batch.inserted_at %>
+              </td>
+              <td>
+                <div><%= batch.status %></div>
+              </td>
+              <%= hidden_input f, :batch_no %>
+            </tr>
+          <% end %>
+          <%# <% end %1> %>
+        </tbody>
+      </table>
+      <div class="actions">
+        <div class="center align">
+          <a href="#" class="ui deny basic button" style="width: 10rem" id="cancel_add_existing">
+            back
+          </a>
+          <button class="ui floated blue button" style="width: 10rem" type="submit">
+            Add
+          </button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

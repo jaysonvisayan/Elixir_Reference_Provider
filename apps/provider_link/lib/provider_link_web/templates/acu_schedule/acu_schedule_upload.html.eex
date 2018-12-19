@@ -1,0 +1,272 @@
+<%= form_for @changeset, acu_schedule_path(@conn, :submit_upload, @acu_schedule.id), [as: :acu_schedule_upload, class: "ui form mt-3", multipart: true, id: "acu_schedule_upload_form"], fn f -> %>
+  <div class="ui container">
+    <div class="ui grid">
+      <p class="info-content">Upload ACU Schedule</p>
+      <div class="row">
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <span class="info-title">Company Code</span>
+            <span class="bold fs-16"><%= @acu_schedule.account_code %></span>
+          </div>
+        </div>
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <span class="info-title">Company Name</span>
+            <span class="bold fs-16"><%= @acu_schedule.account_name %></span>
+          </div>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <!-- <span class="info-title">Date From</span>
+            <span class="bold fs-16"><%= @acu_schedule.date_from %></span> -->
+            <span class="info-title">Scheduled Date</span>
+            <span class="bold fs-16"><%= @acu_schedule.date_from %></span>
+          </div>
+        </div>
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <!-- <span class="info-title">Date To</span>
+            <span class="bold fs-16"><%= @acu_schedule.date_to %></span> -->
+            <span class="info-title">Scheduled Time</span>
+            <span class="bold fs-16"><%= @acu_schedule.time_from %> - <%= @acu_schedule.time_to %></span>
+          </div>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <!-- <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <span class="info-title">Number of Guaranteed Heads</span>
+            <span class="bold fs-16"><%= @acu_schedule.no_of_guaranteed %></span>
+          </div>
+        </div> -->
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <span class="info-title">Total Number of Member who availed ACU</span>
+            <span class="bold fs-16"><%= availed_members(@acu_schedule.acu_schedule_members) %></span>
+          </div>
+        </div>
+        <!-- less than -->
+        <%= if compare_amount(@total_amount, @acu_schedule.guaranteed_amount) == Decimal.new(-1) do %>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        <br>
+        <table class="ui very basic table">
+          <thead>
+            <tr>
+              <th>Total Amount</th>
+              <th>Guaranteed Amount</th>
+              <th hidden>Adjustment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span><%= @total_amount %>PHP</td>
+              <td><span><%= @acu_schedule.guaranteed_amount %></span>PHP</td>
+              <td>
+                <div class="field">
+                  <!--<input type="text" name="adjustment" placeholder="00.00">-->
+                  <%= text_input f, :estimate_total_amount, placeholder: "00.00", class: "hidden" %>
+                  <input type="hidden" name="acu_schedule_upload[actual_total_amount]" value="<%= @total_amount %>">
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <% else %>
+        <!-- greater than or equal to -->
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <span class="info-title">Guaranteed Amount</span>
+            <span class="bold fs-16"><%= @acu_schedule.guaranteed_amount %></span>
+          </div>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="mb-3">
+            <span class="info-title">Total Amount</span>
+            <span class="bold fs-16"><%= @total_amount %></span>
+            <input type="hidden" name="acu_schedule_upload[actual_total_amount]" value="<%= @total_amount %>">
+            <%# <%= text_input f, :actual_total_amount, placeholder: "00.00", class: "form-control", type: "hidden" ,value: @total_amount %1> %>
+          </div>
+        </div>
+        <% end %>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+          <span class="info-title">SOA Reference No.</span>
+          <div class="field" id="soa_field">
+            <div class="form-group">
+              <!--<input type="text" name="soa-reference-no" placeholder="Add SOA Reference No.">-->
+              <%= text_input f, :soa_reference_no, placeholder: "Add SOA Reference No.", class: "form-control", maxlength: "30" %>
+              <%= error_tag f, :soa_reference_no %>
+            </div>
+          </div>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column"  role="fileupload">
+        <br>
+          <span class="info-title">Please upload supporting document/s</span>
+          <div class="ui fluid basic icon buttons">
+            <a class="ui button" id="addFile">
+              Upload Supporting Document
+              <span class="upload_txt" name="front_side">
+              </span><i class="cloud upload icon"></i>
+            </a>
+            <button type="button" class="ui button" file="front_side" id="upload"><i class="camera icon"></i></button>
+          </div>
+          <%= file_input f, :file,  id: "acu_file", class: "hide", value: "" %>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+          <div class="ui grid">
+            <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+              <a class="large ui basic button fluid" href="/acu_schedules/<%= @acu_schedule.id %>/members">Back</a>
+            </div>
+            <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+               <a class="large ui button fluid submit_upload" id="submit_acu_schedule_loa">Submit</a>
+            </div>
+          </div>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% end %>
+
+<%= form_for @conn, acu_schedule_path(@conn, :cancel_upload, @acu_schedule.id), [id: "cancel_upload", as: :cancel_acu_schedule, class: "ui form mt-3"], fn f -> %>
+<% end %>
+
+<%# PERCENTAGE MODAL %>
+<% number = get_number(@acu_schedule.acu_schedule_members) %>
+<%# <% guaranteed_members = get_guaranteed(@acu_schedule.acu_schedule_members, @acu_schedule.acu_schedule_members) %1> %>
+<% amount_details = get_amount_details(@total_amount, @acu_schedule.guaranteed_amount) %>
+<div class="ui modal-main tiny modal" id="confirm_acu_schedule">
+  <div class="scrolling content">
+    <div class="modal-content mt-4">
+      <div class="ui container">
+        <div class="ui grid">
+          <div class="three wide column"></div>
+          <div class="ten wide column">
+            <div class="ui form">
+              <div class="ui divider"></div>
+              <div class="two fields">
+                <div class="field">
+                  <p style="font-weight: bold">Registration details</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold">Count</p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+              <div class="two fields">
+                <div class="field">
+                  <p>Registered members</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold"><%= number.registered %></p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+             <div class="two fields">
+                <div class="field">
+                  <p>Unregistered members</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right;font-weight: bold"><%= number.unregistered %></p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+              <div class="two fields">
+                <div class="field">
+                  <p><b>Members</b></p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold"><%= number.total %></p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+              <br>
+              <div class="ui divider"></div>
+          </div>
+            <div class="ui form">
+              <div class="two fields">
+                <div class="field">
+                  <p style="font-weight: bold">Amount details</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold">Amount</p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+              <div class="two fields">
+                <div class="field">
+                  <p>Guaranteed amount</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold"><%= @acu_schedule.guaranteed_amount %></p>
+                </div>
+              </div>
+              <div class="two fields">
+                <div class="field">
+                  <p style="text-indent: 15px;">Direct cost</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold" ><%= @total_amount %></p>
+                </div>
+              </div>
+              <div class="two fields">
+                <div class="field">
+                  <p style="text-indent: 15px;">Gross adjustment</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold"><%= amount_details.gross_adjustment %></p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+              <div class="two fields">
+                <div class="field">
+                  <p>Total amount</p>
+                </div>
+                <div class="field">
+                  <p style="text-align: right; font-weight: bold"><%= amount_details.total %></p>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ui grid">
+          <div class="three wide column"></div>
+          <div class="ten wide column">
+            <div class="ui form">
+              <div class="two fields">
+                <div class="field">
+                  <div class="eight wide column">
+                    <button class="big ui negative button fluid" type="button" id="acu_schedule_verify_confirm_cancel"><i class="remove icon"></i>Cancel</button>
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="eight wide column">
+                    <button class="big ui primary button fluid" type="button" id="acu_schedule_verify_confirm_submit"><i class="checkmark icon"></i>Confirm</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%# <input type='hidden' id='stale' value='<%= validate_admission_date(@acu_schedule.date_to, @prescription_term) %1>'> %>

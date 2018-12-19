@@ -1,0 +1,30 @@
+@import '../variables';
+.info-title,
+.segment-title {
+    display: block;
+    font-size: 14px;
+    color: $fortitle;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+}
+
+.info-content {
+    font-size: 28px;
+    color: $black_2;
+    font-weight: 700;
+}
+
+.segment-content-bold,
+.segment-content {
+    font-size: 14px;
+    color: $black_2;
+    margin-bottom: 0;
+}
+
+.segment-content-bold {
+    font-weight: 700;
+}
+
+.segment-gap {
+    margin-top: 2rem;
+}

@@ -1,0 +1,65 @@
+  <%= if assigns[:paylink_user_id] do %>
+    <div class="ui tiny modal" id="modal_iframe">
+  <% else %>
+<div class="ui tiny modal" id="modal_card_no_eligibility">
+    <i class="close icon"></i>
+  <% end %>
+  <div class="content">
+    <div class="fs-20 bold mb-2 text-center">Member Card</div>
+    <div style="background: #2A79FF;color: #FFFFFF;border-radius: 4px;padding: 1.5rem;">
+    <form class="ui form">
+        <p class="member-card-label mt-16">Swipe or Enter 16-digit card no</p>
+        <div class="ui input">
+          <%= if String.length(@card_number) == 16 and not is_nil(@member) do %>
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly value="<%= String.slice(@card_number, 0..3) %>">
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly value="<%= String.slice(@card_number, 4..7) %>">
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly value="<%= String.slice(@card_number, 8..11) %>">
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly value="<%= String.slice(@card_number, 12..15) %>">
+          <% else %>
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly >
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly >
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly >
+            <input style="border-radius: 0px;" class="member-card-number" type="number" readonly >
+          <% end %>
+          <input id="card" type="hidden" value="<%= @card_number %>">
+        </div>
+        <div class="member-card-photo mt-4">
+        </div>
+
+        <div class="ui calendar sixteen wide column" id="birthdate_picker_for_card">
+          <p class="member-card-label mt-4">Birth Date</p>
+          <div class="ui fluid input right icon">
+            <i class="calendar icon"></i>
+            <%= if not is_nil(@member) do %>
+              <input type="text" id="birth_date_for_card" value="<%= @member.birth_date %>" name="bdate_for_card" readonly>
+            <% else %>
+              <input type="text" id="birth_date_for_card" name="bdate_for_card" readonly="">
+            <% end %>
+          </div>
+        </div>
+        <br />
+        </div>
+        <%= cond do %>
+        <%= String.length(@card_number) != 16 -> %>
+          <div id="message" class="ui negative message">
+            <ul class="list">
+              <li>Card number should be a 16 digit number</li>
+            </ul>
+          </div>
+          <button type="button" class="ui fluid large primary button" disabled="">Enter</button>
+        <%= is_nil(@member) -> %>
+          <div id="message" class="ui negative message">
+            <ul class="list">
+              <li>Card number does not exist</li>
+            </ul>
+          </div>
+          <button type="button" class="ui fluid large primary button" disabled="">Enter</button>
+        <%= true -> %>
+          <br />
+          <p role="append"></p>
+          <button type="button" class="ui fluid large primary button" id="iframe_verify">Enter</button>
+        <% end %>
+    </form>
+  </div>
+</div>
+

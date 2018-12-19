@@ -1,0 +1,43 @@
+  <%= if is_nil(assigns[:paylink_user_id]) do %>
+    <div id="modal_option_evoucher" class="ui tiny modal">
+    <i class="close icon"></i>
+  <% else %>
+    <div id="modal_option_evoucher_no_session" class="ui tiny modal">
+  <% end %>
+  <div class="scrolling content">
+    <div class="fs-20 bold mb-2 text-center">Member Authentication</div>
+    <form class="ui form">
+      <div class="member-card-wrapper" style="padding-bottom: 6rem !important;">
+        <div class="skew-bg"></div>
+        <p class="member-card-title">Member eVoucher</p>
+        <p class="member-card-label mt-4">Select eVoucher type and Enter 6-digit eVoucher number</p>
+        <div class="ui right fluid labeled input">
+          <div class="ui dropdown label">
+          <div class="text" id="selected_type"></div>
+          <i class="dropdown icon"></i>
+          <div class="menu">
+            <div class="item">ACU</div>
+            <div class="item">ECU</div>
+          </div>
+        </div>
+        <input class="member-voucher-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="6" name="voucher_no" placeholder="_ _ _ _ _ _">
+        <input id="voucher_number" type="hidden">
+       </div>
+      </div>
+      <p role="append2"></p>
+      <button type="button" class="ui fluid large primary button" id="btnEnterEVOUCHER">Submit</button>
+      <%= if assigns[:paylink_user_id] do %>
+        <a href="http://paylinkapiuat.medilink.com.ph/LOA.aspx" class="ui fluid large basic primary button">Back</a>
+      <% end %>
+    </form>
+    <div class="new-method-wrapper mt-4 text-center">
+      <a style="cursor: pointer" id="choose_other_options_evoucher">
+        <p class="new-method-title">Member doesn't have a eVoucher now?</p>
+        <p class="new-method-title"><b>Try another method</b></p>
+        <div class="mt-3">
+          <p class="new-method-content">Enter eVoucher number to continue.</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>

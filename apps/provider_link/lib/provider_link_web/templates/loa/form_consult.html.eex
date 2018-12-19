@@ -1,0 +1,55 @@
+<%= form_for @changeset, @action, [as: :loa, class: "ui form mt-3", name: "loa_consult"], fn f -> %>
+  
+  <%= hidden_input f, :member_id, value: @loa.card.member.payorlink_member_id%>
+  <%= hidden_input f, :card_number, value: @loa.card.number%>
+  <%= hidden_input f, :loa_id, value: @loa.id%>
+  <div class="field">
+    <label class="label-title">Consultation Type</label>
+    <%= select f, :consultation_type, ["Initial": "initial", "Follow Up": "follow up", "Clearance": "clearance"], prompt: "Consultation Type", class: "ui search selection dropdown search-dropdown search-dropdown" %>
+    <font color="red"><%= error_tag f, :consultation_type %></font>
+  </div>
+
+  <div class="field">
+    <label class="label-title">Chief Complaint</label>
+    <%= select f, :chief_complaint, ["Fever": "fever", "Cough and Colds": "CAC", "Accidents and Trauma": "AAT", "Abdominal pain": "abdominal_pain", "High blood pressure": "HBP", "Chest pain and palpitations": "CPP", "Dizziness": "dizziness", "Back pain and Low back pain": "BPALBP", "Rashes, allergy and itchiness": "RAI", "Headache": "headache"], prompt: "Chief Complaint", class: "ui search selection dropdown search-dropdown search-dropdown" %>
+    <font color="red"><%= error_tag f, :chief_complaint %></font>
+  </div>
+
+  <div class="field">
+    <div class="ui grid">
+      <div class="ten wide column" style="padding-right: 0.1px">
+        <div class="field">
+          <label class="label-title">Consulting Doctor</label>
+          <%# <%= select f, :doctor_id, filter_doctors(@doctors), class: "ui fluid search selection dropdown" %1> %>
+          <%= select f, :doctor_specialization_id, filter_doctors(@doctors), class: "ui fluid search selection dropdown search-dropdown" %>
+          <font color="red"><%= error_tag f, :doctor_specialization_id %></font>
+        </div>
+      </div>
+
+      <div class="six wide column" style="padding-left: 15px;">
+          <a href="#!" class="ui icon button " style="margin-top: 21px !important" id="filter_specialization" f_id="<%= @conn.assigns.current_user.agent.provider.id %>">
+            <i class="filter icon"></i>
+          </a>
+          <a class="ui grey label" id="append_specialization">
+            <div style="display: inline-block; overflow-wrap: break-word; max-width: 140px">
+              <span id="spec_val"></span>
+            </div>
+            <div style="text-align: right; display: inline-block; vertical-align: top;">
+              <i class="delete icon" id="filter_all_specialization" f_id="<%= @conn.assigns.current_user.agent.provider.id %>"></i>
+            </div>
+          </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= label f, :diagnosis_id, "Diagnosis", class: "label-title"%>
+    <%= select f, :diagnosis_id, filter_diagnosis(@diagnoses), class: "ui fluid search selection dropdown search-dropdown" %>
+    <%= error_tag f, :diagnosis_id %>
+  </div>
+  <div class="field">
+    <label class="label-title">Internal Remarks</label>
+    <%= textarea f, :internal_remarks, class: "form-control" %>
+  </div>
+  <button class="large ui button fluid" type="submit">Proceed</button>
+<% end %>

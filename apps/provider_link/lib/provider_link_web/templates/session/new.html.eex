@@ -1,0 +1,56 @@
+<script src='https://www.google.com/recaptcha/api.js'></script>
+<script type="text/javascript">
+    function callback() {
+      $('#username').removeClass('error')
+      $('#password').removeClass('error')
+      $('div[id="message"]').remove()
+      let captcha = $("#g-recaptcha-response").val()
+      $('#captcha').val(captcha)
+    }
+</script>
+<div class="seven wide computer ten wide tablet right floated sixteen wide mobile column" role="login_user">
+  <div class="ui middle aligned grid" id="login_form">
+    <div class="ten wide mobile centered sixteen wide tablet column">
+      <%= form_for @conn, session_path(@conn, :create), [as: :session, class: "ui form"], fn f -> %>
+        <div class="ui very padded raised segment">
+          <h2 class="ui center aligned header">Login to your Medilink account</h2>
+          <p role="append" class="center aligned"></p>
+          <%
+            info = get_flash(@conn, :info)
+            error = get_flash(@conn, :error)
+          %>
+          <%= cond do %>
+          <% not is_nil(error) -> %>
+            <div id="message" class="ui negative message center aligned">
+              <%= error %>
+            </div>
+          <% not is_nil(info) -> %>
+            <div id="message" class="ui green message center aligned">
+              <font color="green"><%=  info %></font>
+            </div>
+          <% true -> %>
+          <% end %>
+          <div id="username" class="field">
+            <label for="email">Username</label>
+            <%= text_input f, :username, placeholder: "Enter your username" , autofocus: "" %>
+          </div>
+          <div class="field" id="password">
+            <label for="email">Password <span class="ui float-right"> <a href="/forgot_password">Forgot password</a></span></label>
+            <div class="ui icon input">
+              <i class="eye link icon" id="eye"></i>
+              <%= password_input f, :password, placeholder: "Password", autocomplete: "off" %>
+            </div>
+          </div>
+          <%= hidden_input f, :captcha, id: "captcha"%>
+          <%= if @attempts >= 3 do %>
+            <center><div class="g-recaptcha" data-sitekey="6Ld3xGUUAAAAAOdc3Y18SRulKjbCigMxrS34M7B5" data-callback="callback"></div></center>
+          <% end %>
+        <button type="submit" class="ui fluid large primary submit button">Login</button>
+        <div class="ui hidden divider"></div>
+        <%# <p class="text-center">Not Registered yet? <a href="/sign_up">Sign up now</a></p> %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<!-- form -->

@@ -1,0 +1,33 @@
+@import '../variables';
+header {
+    top: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    .ui.menu {
+        padding-left: 6rem;
+        box-shadow: none;
+        border-radius: 0;
+        border: 0;
+        border-bottom: 1px solid rgba(34, 36, 38, 0.15);
+        .site-logo {
+            height: 28px;
+        }
+        .right.item a {
+            font-size: 16px;
+            color: #888888;
+            .alarm.icon {
+                margin-right: 1rem;
+            }
+        }
+        &.vertical {
+            color: $gray;
+        }
+        .item {
+            border-left: 0 !important;
+            &:before {
+                width: 0;
+            }
+        }
+    }
+}

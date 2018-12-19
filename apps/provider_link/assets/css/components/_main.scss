@@ -1,0 +1,186 @@
+@import '../variables';
+a {
+    color: $brand_color;
+}
+
+hr {
+    border: 0.5px solid $gray_2;
+    margin: 2rem 0;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 0;
+    z-index: 1;
+}
+
+#footer {
+    padding-left: 6rem;
+    margin-left: 1rem;
+}
+
+.nav .three.column {
+    border-right: 1px solid rgba(34, 36, 38, 0.15);
+}
+
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.bold {
+    font-weight: 700;
+}
+
+.thin {
+    font-weight: 300;
+}
+
+.fs-20 {
+    font-size: 20px;
+}
+
+.fs-16 {
+    font-size: 16px;
+}
+
+.hide {
+    display: none;
+}
+
+.dim {
+    color: $gray;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.fd-col {
+    flex-direction: column;
+}
+
+.fd-row {
+    flex-direction: row;
+}
+
+.jc-center {
+    justify-content: center;
+}
+
+.ai-center {
+    align-items: center;
+}
+
+.mobile-only {
+    display: none;
+}
+
+.upload.icon {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+.discharge-date {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.dashboard-title {
+    font-size: 24px;
+    color: $black_2;
+    font-weight: 700;
+}
+
+.subtitle {
+    color: $gray;
+    font-size: 12px;
+}
+
+.right-side-out {
+    position: fixed;
+    top: 0;
+    right: 0;
+    transform: translateX(420px);
+    margin-top: 58px;
+    border: 1px solid $gray_2;
+    width: 420px;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
+    background: white;
+    height: calc(100% - 58px);
+    transition: 0.3s all ease-in;
+    &.slide-in {
+        transform: translateX(0);
+        i.plus {
+            transform: rotate(45deg);
+            transition: 0.3s all ease-in;
+        }
+        .right-side-out__trigger-button {
+            background-color: $gray;
+        }
+    }
+}
+
+.right-side-out__item {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border-bottom: 1px solid $gray_2;
+}
+
+.pdf-image {
+    height: 32px;
+}
+
+.qrcode {
+    height: 240px;
+}
+
+span.red {
+    color: #E75042;
+}
+
+.sms-content {
+    color: $gray;
+    font-size: 14px;
+}
+
+.sub-content {
+    color: $white;
+    font-size: 10px;
+}
+
+.no_margin_bot {
+  margin-bottom: 0rem;
+}
+
+.mod_label {
+  color: #565656;
+  font-size: 1.10rem;
+}
+
+.paylink {
+  background-color: $paylink;
+}
+
+.disabled.card{
+  cursor: default;
+  color: rgba(0, 0, 0, 0.4) !important;
+  opacity: 0.3 !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  pointer-events: none;
+}

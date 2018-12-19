@@ -1,0 +1,64 @@
+<% # TODO: List all ACU Schedules %>
+<div class="ui main container" id="acu_mobile">
+  <div class="ui grid">
+      <div class="sixteen wide column">
+          <div class="ui right aligned grid">
+              <div class="left floated left aligned eight wide column">
+                  <h1 class="ui huge header with-button">ACU Schedule</h1>
+              </div>
+              <div class="right floated right aligned eight wide column">
+                <a class="ui primary basic button" href="#" id="export_btn"><i class="upload icon"></i> Export Masterlist</a>
+               </div>
+          </div>
+          <div class="ui breadcrumb">
+              <a href="/acu_schedules" class="section">ACU Schedules</a>
+              <div class="divider"> / </div>
+              <div class="active section">Search</div>
+          </div>
+          <div class="ui divider"></div>
+      </div>
+  </div>
+  <table role="datatable" id="acu_schedule_table" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th><input type="checkbox" style="width:20px; height:20px" id="checkAllacu"></th>
+        <th>Batch No.</th>
+        <th>Facility Code/Name</th>
+        <th>Cluster Code/Name</th>
+        <th>Account Code/Name</th>
+        <th>Schedule<br>(Date and Time)</th>
+        <th>Schedule Created by</th>
+        <th>Masterlist Generation Date and Time</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+       <%= for acu_schedule <- @acu_schedules do %>
+         <tr>
+           <td><input style="width:20px; height:20px" type="checkbox" id="acu_sched_ids" class="selection" value="<%= acu_schedule.id %>"></td>
+          <td><%= acu_schedule.batch_no %></td>
+          <td><%= acu_schedule.provider.code %>/<%= acu_schedule.provider.name %></td>
+          <td></td>
+          <td><%= acu_schedule.account_code %>/<%= acu_schedule.account_name %></td>
+          <%= if is_nil(acu_schedule.time_from) || is_nil(acu_schedule.time_to) do %>
+          <td><%= Ecto.Date.to_string(acu_schedule.date_from) <> " to " <>  Ecto.Date.to_string(acu_schedule.date_to)%></td>
+          <% else %>
+          <td><%= Ecto.Date.to_string(acu_schedule.date_from)<>";"<>remove_seconds(acu_schedule.time_from)<>"-"<>remove_seconds(acu_schedule.time_to)<> " to " <>  Ecto.Date.to_string(acu_schedule.date_to)<>";"<>remove_seconds(acu_schedule.time_from)<>"-"<>remove_seconds(acu_schedule.time_to)%></td>
+          <% end %>
+          <td><%= acu_schedule.created_by %></td>
+          <td class="valid_timezone" value="<%= acu_schedule.inserted_at%>"><%= acu_schedule.inserted_at %></td>
+          <%= if acu_schedule.status == nil do %>
+          <td><a href="/acu_schedules/<%= acu_schedule.id %>/members">Encode</a></td>
+        <% else %>
+          <td><a><%= acu_schedule.status %></a></td>
+        <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= if assigns[:submitted] do %>
+  <input type="hidden" id="show_batch_prompt">
+<% end %>

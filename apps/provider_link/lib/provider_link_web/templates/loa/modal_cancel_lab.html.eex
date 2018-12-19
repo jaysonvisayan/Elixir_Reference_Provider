@@ -1,0 +1,32 @@
+<div class="ui tiny modal" role="cancel_modal">
+  <i class="close icon"></i>
+  <div class="header"><center>
+    Are you sure you want to cancel this LOA ?
+  </center>
+  </div>
+  <div class="content">
+    <center>
+      <%= if @loa.coverage != "ACU" do %>
+        <p class="segment-title">CONSULTATION DATE</p>
+        <p class="segment-content-bold"><%= @loa.consultation_date %></p>
+        <div class="segment-gap"></div>
+      <% end %>
+      <p class="segment-title">REQUESTED BY</p>
+      <p class="segment-content-bold"><%= @agent.first_name %> <%= @agent.middle_name || "" %> <%= @agent.last_name %></p>
+      <div class="segment-gap"></div>
+      <p class="segment-title">TOTAL AMOUNT</p>
+      <p class="segment-content-bold"><%= @loa.total_amount %></p>
+      <div class="segment-gap"></div>
+    </center>
+  </div>
+  <div class="actions">
+     <center>
+    <a class="ui large deny inverted blue button"><i class="cancel icon"></i>No</a>
+    <%= if @is_session do %>
+      <a href="loas/#{@loa.cardmember.id}/cancel" class="ui large primary button"><i class="check icon"></i>Yes</a>
+    <% else %>
+      <a href="loas/#{@loa.cardmember.id}/cancel_loa_no_session" class="ui large primary button"><i class="check icon"></i>Yes</a>
+    <% end %>
+  </center>
+  </div>
+</div>

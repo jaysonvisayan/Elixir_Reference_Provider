@@ -1,0 +1,70 @@
+  <p id="no_diagnosis"></p>
+  <%= form_for @changeset, @action, [as: :lab, class: "ui form mt-3", id: "form_lab"], fn f -> %>
+      <div class="fields">
+        <div class="fifteen wide field">
+          <label class="label-title">Disease/Procedure</label>
+        </div>
+        <div class="five wide field">
+          <a class="ui basic button plus mobile-mt-1" id="add_diagnosis"><i class="plus icon"></i>Add</a>
+        </div>
+      </div>
+
+      <%= if Enum.empty?(@loa.loa_diagnosis) do %>
+      <% else %>
+      <div class="ui divider mrg0T mrg0B"></div>
+      <table class="ui stripped table">
+        <thead>
+          <tr>
+            <th>Disease</th>
+            <th>Procedure</th>
+            <th>Unit</th>
+            <th>Amount</th>
+            <th>PhilHealth</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= if @loa.loa_diagnosis != [] do %>
+            <%= for loa_diagnosis <- @loa.loa_diagnosis do %>
+              <%= for loa_procedure <- Enum.sort_by(loa_diagnosis.loa_procedure, &(&1.id)) do %>
+                <tr>
+                  <td><%= loa_diagnosis.diagnosis_code %>  /  <%= loa_diagnosis.diagnosis_description %></td>
+                  <td><%= loa_procedure.procedure_code %>  /  <%= loa_procedure.procedure_description %></td>
+                  <td><%= loa_procedure.unit %></td>
+                  <td><%= loa_procedure.amount %></td>
+                  <td></td>
+                </tr>
+              <% end %>
+            <% end %>
+          <% end %>
+        </tbody>
+      </table>
+      <% end %>
+    <div class="field" role="loa_date_picker">
+      <label class="label-title">Consultation date (upto 2 days from today)</label>
+      <div class="ui calendar" name="consultation_date" id="consultation_date">
+        <div class="ui input right icon">
+          <i class="calendar icon"></i>
+          <%= text_input f, :consultation_date %>
+        </div>
+      </div>
+      <%= error_tag f, :consultation_date %>
+    </div>
+    <div class="field">
+      <label class="label-title">Ordering Physician</label>
+        <%= select f, :doctor_id, filter_doctors(@doctors), class: "ui fluid search selection dropdown" %>
+      <%= error_tag f, :doctor_id %>
+    </div>
+    <div class="field">
+      <label class="label-title">Doctor's Lab Order</label>
+        <input type="file" name="upload-lab-order" id="upload-lab-order" class="hide">
+      <div class="ui basic icon large buttons upload-order">
+        <label class="ui button" for="upload-lab-order"><span class="tablet-only">Upload Doctor's Lab order</span> <span class="mobile-only">Upload Lab Order</span> <i class="upload icon"></i></label>
+        <label class="ui button"><i class="photo icon"></i></label>
+      </div>
+    </div>
+      <%= if @loa.loa_diagnosis != [] do %>
+        <button class="large ui button fluid" type="submit">Proceed</button>
+      <% else %>
+        <button class="large ui button fluid" type="button" id="empty_diagnosis">Proceed</button>
+      <% end %>
+<% end %>

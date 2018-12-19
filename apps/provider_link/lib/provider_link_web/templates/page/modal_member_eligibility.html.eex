@@ -1,0 +1,48 @@
+<div id="modal_member_eligibility" class="ui tiny modal">
+  <%= if assigns[:paylink_user_id] do %>
+  <% else %>
+    <i class="close icon"></i>
+  <% end %>
+  <div class="content">
+    <div class="fs-20 bold mb-2 text-center">Member Information</div>
+    <div style="background: #2A79FF;color: #FFFFFF;border-radius: 4px;padding: 1.5rem;">
+      <div class="ui grid">
+        <div class="sixteen wide column">
+          <p class="member-card-label mt-4">Member Name</p>
+        </div>
+        <div class="sixteen wide column">
+          <div class="ui fluid input">
+            <input type="text" id="full_name" placeholder="Enter member's full name">
+          </div>
+        </div>
+        <div class="ui calendar sixteen wide column" id="birthdate_picker">
+          <p class="member-card-label mt-4">Member Birth Date</p>
+          <div class="ui fluid input right icon">
+            <i class="calendar icon"></i>
+            <input type="text" id="birth_date" placeholder="Enter member's birthday">
+          </div>
+        </div>
+      </div>
+      <input type="hidden" name="new_link" id="new_link" value=""><br /><br />
+    </div>
+    <br />
+    <div id="loader"></div><p role="append_new"></p>
+    <button type="button" class="ui fluid primary button" id="verify">Verify</button>
+    <div id="overlay2" style="display: none" class="ui active inverted dimmer"> <div class="ui text loader">loading</div></div>
+    <%= if assigns[:paylink_user_id] do %>
+      <input id="paylink_user_id" type="hidden" value="<%= @paylink_user_id %>"></input>
+      <a href="http://paylinkapiuat.medilink.com.ph/LOA.aspx" class="ui fluid large basic primary button">Back</a>
+    <% end %>
+    <div class="new-method-wrapper mt-4 text-center">
+      <a style="cursor: pointer" id="choose_other_options_details">
+        <p class="new-method-title">Member doesn't know the details?</p>
+        <p class="new-method-title"><b>Try another method</b></p>
+        <div class="mt-3">
+          <p class="new-method-content">Enter Member's Name and Birthdate to continue<br/></p>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
+

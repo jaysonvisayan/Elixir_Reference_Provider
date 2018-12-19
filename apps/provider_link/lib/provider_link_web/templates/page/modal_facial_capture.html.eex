@@ -1,0 +1,53 @@
+<div id="modal_facial_capture" class="ui tiny modal">
+    <%= if assigns[:paylink_user_id] do %>
+    <% else %>
+    <i class="close icon"></i>
+    <% end %>
+    <div class="content">
+        <div class="fs-20 bold mb-2 text-center">Capture Facial Image</div>
+
+        <%= loa_path = if assigns[:paylink_user_id] do %>
+        <% loa_path(@conn, :capture_facial_no_session) %>
+        <% else %>
+        <% loa_path(@conn, :capture_facial) %>
+        <% end %>
+        <%= form_for @conn, loa_path, [as: :facial_params, class: "ui form", id: "fc-photo1", multipart: :true], fn f -> %>
+
+        <% end %>
+
+        <div class="ui segments">
+            <div class="ui segment" id="fileUpload">
+                <br>
+                <div class="ui grid centered container">
+                    <div class="ui centered special cards">
+                        <video width=320 height=240 id="video2" autoplay style="margin-top: 20px"></video>
+                        <canvas id="canvas2" height=240 width=320 name="facial_params[facial_image]" style="margin-top: 20px">
+                        </canvas>
+                    </div>
+                    <div class="extra content">
+                        <%= form_for @conn, loa_path, [as: :facial_params, class: "ui form", id: "fc-photo", multipart: :true], fn f -> %>
+                        <%= if assigns[:paylink_user_id] do %>
+                        <%= hidden_input f, :paylink_user_id, class: "ui hide", value: @paylink_user_id %>
+                        <% end %>
+                        <%= hidden_input f, :capture, class: "ui hide", id: "goverment_id_capture", value: "no" %>
+                        <%= hidden_input f, :card_no, class: "ui hide", id: "hidden-card-no"%>
+                        <%= hidden_input f, :photo, id: "photo-web-cam", accept: "image/*", class: "ui hide" %>
+                        <%= hidden_input f, :facial_image, id: "facial-web-cam", accept: "image/*", class: "ui hide" %>
+                        <%= file_input f, :gov_photo, id: "imageUpload", accept: "image/*", class: "ui hide" %>
+                        <%= if assigns[:paylink_user_id] do %>
+                          <%= hidden_input f, :code, class: "ui hide", value: "#{@code}"%>
+                        <% end %>
+                      <% end %>
+                      <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div id="loader"></div>
+        <p role="append_new_capture"></p>
+        <button type="button" class="ui fluid primary button large" id="take_image2"><i class="camera icon"></i>Capture</button>
+        <button type="button" class="ui fluid primary button large" id="submit_capture2" value="Submit">Save</button>
+
+    </div>
+</div>

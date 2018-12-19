@@ -1,0 +1,166 @@
+<div class="ui bottom attached tab segment" data-tab="peme">
+  <div class="ui equal width form" id="loa_peme_search">
+    <div class="fields">
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="range_start_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Start Date" role="mask" class="date_mask" id="start_date_peme">
+          </div>
+        </div>
+      </div>
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="range_end_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="End Date" role="mask" class="date_mask" id="end_date_peme">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="E-voucher Number" id="evoucher_no_peme">
+      </div>
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="start_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Birth Date" role="mask" class="date_mask" id="birth_date_peme">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="LOA Number" id="loa_no_peme">
+      </div>
+
+      <div class="field">
+        <div class="ui primary buttons">
+          <div class="ui button" id="btn_search_peme"><i class="search icon"></i>Search</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="div_peme">
+    <table class="ui celled table big-table" style="width: 100%" id="tbl_peme" >
+      <thead>
+        <tr>
+          <td><input type="checkbox" style="width:20px; height:20px; margin-left:13px" id="checkAllpeme"></td>
+          <td class="bold dim">MEMBER INFORMATION</td>
+          <td class="bold dim">E-VOUCHER NO</td>
+          <td class="bold dim">PAYOR</td>
+          <td class="bold dim">ISSUED DATE/TIME</td>
+          <td class="bold dim">AMOUNT</td>
+          <td class="bold dim">STATUS</td>
+          <td class="bold dim">LOA NUMBER</td>
+          <%# <td class="bold dim"></td> %>
+        </tr>
+      </thead>
+      <tbody>
+        <%# <%= if Enum.empty?(@pemes) do %1> %>
+        <%#   <tr class="text-center"> %>
+        <%#     <td colspan="8">No Records Found!</td> %>
+        <%#   </tr> %>
+        <%# <% else %1> %>
+          <%= for peme <- @pemes do %>
+            <tr>
+              <td>
+                <%# if peme.status == "Approved" && peme.is_cart && peme.is_batch do %>
+                  <%# <input style="width:20px; height:20px" type="checkbox" id="peme_loa_ids" class="selection" value="<%= peme.id >" disabled > %>
+                <%# else %>
+                  <%# if peme.status == "Approved" && peme.is_cart == false && peme.is_batch == false do %>
+                    <%# <input style="width:20px; height:20px" type="checkbox" class="selection" value="<%= peme.id >" id="peme_loa_ids"> %>
+                  <%# end %>
+                <%# end %>
+                <%= if peme.status == "Approved" && peme.is_cart == false && peme.is_batch == false do %>
+                  <input style="width:20px; height:20px" type="checkbox" class="selection" value="<%= peme.id %>" id="peme_loa_ids" data-value="<%= peme.id %>">
+                <% else %>
+                  <input style="width:20px; height:20px" type="checkbox" id="peme_loa_ids" class="selection" value="" data-value="<%= peme.id %>" disabled >
+                <% end %>
+              </td>
+              <td>
+                <%= cond do %>
+                  <%= String.downcase(peme.status) == "draft" -> %>
+                    <a href="loas/<%= peme.payorlink_member_id %>/package_info/<%= peme.verification_type %>/<%= peme.id%>"><div>Member ID: <%= peme.payorlink_member_id %></div></a>
+                  <% true -> %>
+                    <a href="loas/<%= peme.id %>/show_peme"><div>Member ID: <%= peme.payorlink_member_id %></div></a>
+                <% end %>
+                <div>Age: <%= get_age(peme.member_birth_date) %> </div>
+                <div>Gender: <%= peme.member_gender %></div>
+              </td>
+              <td><%= peme.member_evoucher_number %></td>
+              <td>Maxicare</td>
+              <td><%= format_datetime(peme.issue_date) %></td>
+              <td class="bold"><%= if is_nil(peme.total_amount) do "" else peme.total_amount |> Decimal.round(2) end %></td>
+              <td>
+                <%= cond do %>
+                  <%# <% peme.otp == true -> %1> %>
+                  <%#   <div class="tag tag--violet">verified</div> %>
+                  <% peme.status == "" -> %>
+                    <div class="tag tag--blue">draft</div>
+                  <% is_nil(peme.status) -> %>
+                    <div class="tag tag--blue">draft</div>
+                  <% String.downcase(peme.status) == "draft" -> %>
+                    <div class="tag tag--blue"><%= peme.status %></div>
+                  <% String.downcase(peme.status) == "pending" -> %>
+                    <div class="tag tag--orange"><%= peme.status %></div>
+                  <% String.downcase(peme.status) == "approved" -> %>
+                    <div class="tag tag--green"><%= peme.status %></div>
+                  <% String.downcase(peme.status) == "availed" -> %>
+                    <div class="tag tag--green"><%= peme.status %></div>
+                  <% String.downcase(peme.status) == "cancelled" -> %>
+                    <div class="tag tag--black"><%= peme.status %></div>
+                  <% String.downcase(peme.status) == "disapproved" -> %>
+                    <div class="tag tag--red"><%= peme.status %></div>
+                <% end %>
+              </td>
+              <td><%= peme.loa_number %></td>
+              <%# <td><a href=""><span class="mobile-only mr-1"> Download </span><img src="images/table_row_download.png" alt=""></a></td> %>
+            </tr>
+          <% end %>
+        <%# <% end %1> %>
+      </tbody>
+      <%# <tfoot> %>
+      <%#   <%= if not Enum.empty?(@pemes) do %1> %>
+      <%#     <tr> %>
+      <%#       <td> %>
+      <%#         <%= form_for @conn, loa_path(@conn, :add_to_cart), [id: "add-to-cart", multipart: true, as: :loa], fn _f -> %1> %>
+      <%#           <input type="hidden" name="loa[loa_ids]" id="loa_ids_peme"/> %>
+      <%#           <button class="ui basic blue button disabled" id="add_to_cart_peme" type="submit"> %>
+      <%#             <i class="plus icon"></i> %>
+      <%#             ADD TO CART %>
+      <%#           </button> %>
+      <%#         <% end %1> %>
+      <%#       </td> %>
+      <%#     </tr> %>
+      <%#   <% end %1> %>
+      <%#   </tfoot> %>
+    </table>
+  </div>
+
+  <%# <div class="ui equal width form"> %>
+  <%#   <div class="fields"> %>
+
+  <%#     <div class="field"> %>
+  <%#       <div class="ui basic buttons"> %>
+  <%#         <div class="ui button">Export</div> %>
+  <%#         <div class="ui floating dropdown icon button"> %>
+  <%#           <i class="dropdown icon"></i> %>
+  <%#           <div class="menu"> %>
+  <%#             <div class="item"><i class="file excel outline icon"></i> CSV </div> %>
+  <%#             <div class="item"><i class="file code outline icon"></i> JSON </div> %>
+  <%#             <div class="item"><i class="file pdf outline icon"></i> PDF </div> %>
+  <%#             <div class="item"><i class="file archive outline icon"></i> ZIP </div> %>
+  <%#           </div> %>
+  <%#         </div> %>
+  <%#       </div> %>
+  <%#     </div> %>
+
+  <%#   </div> %>
+  <%# </div> %>
+</div>

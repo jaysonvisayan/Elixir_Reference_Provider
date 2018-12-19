@@ -1,0 +1,91 @@
+<%= form_for @changeset, @action, [id: "validate_accountlink_member", class: "ui form segment", multipart: :true, as: :peme], fn f -> %>
+<br />
+  <span class="info-title">Application Form</span>
+  <span class="bold fs-20">Pre Employment Medical Exam</span>
+
+<br />
+<p role="append"></p>
+<p class="sixteen wide mobile only column mb-3"><span class="info-title">Personal Information</span></p>
+<div class="ui grid">
+  <div class="eight wide field">
+    <%= label f, "First Name" %>
+    <%= text_input f, :first_name , value: check_member_value(@member, @member.first_name) , placeholder: "Enter First Name", class: "peme_input", maxlength: "150" %>
+    <%= error_tag f, :first_name %>
+  </div>
+  <div class="eight wide field">
+    <%= label f, "Middle Name" %>
+    <%= text_input f, :middle_name , value: check_member_value(@member, @member.middle_name), placeholder: "Enter Middle Name", class: "peme_input", maxlength: "150" %>
+    <%= error_tag f, :middle_name %>
+  </div>
+
+  <div class="eight wide field">
+    <%= label f, "Last Name" %>
+      <%= text_input f, :last_name , value: check_member_value(@member, @member.last_name), placeholder: "Enter Last Name", class: "peme_input", maxlength: "150" %>
+      <%= error_tag f, :last_name %>
+  </div>
+  <div class="eight wide field">
+    <%= label f, :extension, "Suffix" %>
+    <%= text_input f, :extension , value: check_member_value(@member, @member.extension), placeholder: "Enter Suffix", class: "peme_input", maxlength: "10" %>
+    <%= error_tag f, :extension %>
+  </div>
+
+  <div class="eight wide field">
+    <%= label f, "Date of Birth" %>
+      <div class="ui calendar" id="birth_date">
+        <div class="ui fluid input right icon">
+          <i class="calendar icon"></i>
+          <%= text_input f, :birth_date, value: check_member_value(@member, @member.birth_date), placeholder: "Select Birth Date", class: "peme_date_input", maxlength: "10" %>
+        </div>
+      </div>
+  </div>
+  <div class="eight wide field">
+    <%= label f, "Civil Status" %>
+    <%= select f, :civil_status , ["Select Civil Status": "", "Single": "Single", "Single Parent": "Single Parent", "Married": "Married", "Widowed": "Widowed", "Seperated": "Seperated", "Annulled": "Annulled"], class: "ui fluid dropdown", value: check_member_value(@member, @member.civil_status) %>
+    <%= error_tag f, :civil_status %>
+  </div>
+
+  <div class="sixteen wide field" id="gender_radio">
+    <p><%= label f, "Gender" %></p>
+    <div class="sixteen wide column">
+      <div class="ui one wide field radio checkbox">
+        <%= if String.downcase("#{@member.gender}") == "male" do %>
+         <input type="radio" checked=true name="radio" id="male" value="Male">
+        <% else %>
+          <input type="radio" name="radio" id="male" value="Male">
+        <% end %>
+        <label>Male</label>
+      </div>
+      <div class="ui radio checkbox">
+        <%= if String.downcase("#{@member.gender}") == "female" do %>
+         <input type="radio" checked=true name="radio" id="female" value="Female">
+        <% else %>
+          <input type="radio" name="radio" id="female" value="Female">
+        <% end %>
+        <label>Female</label>
+      </div>
+    </div>
+    <%= case String.downcase("#{@member.gender}") do %>
+    <% "male" -> %>
+      <%= hidden_input f, :gender, value: "Male" %>
+    <% "female" -> %>
+      <%= hidden_input f, :gender, value: "Female" %>
+    <% _ -> %>
+      <%= hidden_input f, :gender, value: "" %>
+    <% end %>
+  </div>
+
+    <input type="hidden" id="evoucher" value="<%= slice_evoucher(@member.evoucher_number) %>">
+    <input type="hidden" id="member_id" name="peme[id]" value="<%= @member.id %>">
+    <div class="sixteen wide column">
+      <button class="ui right floated submit primary button" type="submit" id="submit">
+        Next
+        <i class="chevron right icon"></i>
+      </button>
+        <a href="/" class="ui basic primary button">
+          <i class="remove left icon"></i>
+          Cancel
+        </a>
+    </div>
+  </div>
+<% end %>
+<input type="hidden" id="status">

@@ -1,0 +1,81 @@
+<div class="ui main container" id="batch">
+  <div class="ui grid" id="acu_mobile">
+    <div class="sixteen wide column">
+      <div class="ui right aligned grid">
+        <div class="left floated left aligned eight wide column">
+          <h1 class="ui huge header with-button">Batch / SOA</h1>
+        </div>
+        <div class="right floated right aligned eight wide column">
+          <%# <button class="ui primary basic button" type="button" id="new_batch" href="/batch/new"><i class="plus icon"></i> Create Batch</a> %>
+          <div class="ui simple primary basic dropdown right floated button">
+            <i class="icon add"></i>
+            Create Batch
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="item clickable-row" href="/batch/new?type=practitioner">Practitioner</a>
+              <a class="item clickable-row" href="/batch/new?type=hospital_bill">Hospital Bill</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ui breadcrumb">
+        <a href="/acu_schedules" class="section">Batch / SOA</a>
+        <div class="divider"> / </div>
+        <div class="active section">Search</div>
+      </div>
+      <div class="ui divider"></div>
+    </div>
+  </div>
+  <table role="datatable" class="ui very basic striped selectable table" cellspacing="0" width="100%">
+    <thead>
+      <tr>
+        <th>Batch No.</th>
+        <th>SOA Reference No.</th>
+        <th>Batch Type</th>
+        <th>Physician Name</th>
+        <th>Date Created</th>
+        <th>Date Submitted</th>
+        <th>Created By</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for batch <- @batches do %>
+        <tr>
+          <td>
+            <a href="/batch/<%= batch.id %>/batch_details"><%= batch.number %></a>
+          </td>
+          <td>
+            <%= batch.soa_reference_no %>
+          </td>
+          <td>
+            <%= if batch.type == "practitioner" do %>
+              PF
+            <% else %>
+              HB
+            <% end %>
+          </td>
+          <td>
+            <%= display_practitioner(batch) %>
+          </td>
+          <td class="valid_timezone" value="<%= batch.inserted_at %>">
+            <%= batch.inserted_at %>
+          </td>
+          <%= if String.downcase(batch.status) == "submitted" do %>
+            <td class="valid_timezone" value="<%= batch.updated_at %>">
+              <%= batch.updated_at %>
+            <% else %>
+              <td> N/A </td>
+            <% end %>
+            <td>
+              <%= display_created_by(batch) %>
+            </td>
+            <td>
+              <%= batch.status %>
+            </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<%= render "modal_new_batch.html" %>

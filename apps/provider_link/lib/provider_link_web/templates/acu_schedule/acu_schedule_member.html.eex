@@ -1,0 +1,142 @@
+<% # TODO: List all ACU Schedules %>
+<div class="ui main container" id="acu_schedule_member">
+  <div class="ui grid">
+    <div class="sixteen wide column">
+      <div class="ui right aligned grid">
+        <div class="left floated left aligned eight wide column">
+          <h1 class="ui huge header with-button">ACU Members</h1>
+        </div>
+        <div class="eight wide column">
+          <button class="ui primary button" type="button" id="upload_member">
+            <i class="cloud upload icon" style="margin-left:-20px"></i>
+            Upload File
+          </button>
+        </div>
+      </div>
+      <!--<h1 class="ui huge header">Account</h1>-->
+      <div class="ui breadcrumb"</div>
+      <div class="ui divider"></div>
+    </div>
+  </div>
+  <%= form_for @changeset, acu_schedule_path(@conn, :update_member_schedule, @acu_schedule), [as: :acu_schedule_member, class: "form2"], fn _f -> %>
+  <input type="hidden" id="hidden_acu" value="" name="acu_schedule_member[acu_schedule_member_ids_main]">
+  <table role="datatable" class="ui very basic striped selectable table" cellspacing="0" width="100%" id="acu_mobile_table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" style="width:20px; height:20px" id="select_all"></th>
+
+        <th>Card No.</th>
+        <th>Full Name</th>
+        <th>Gender</th>
+        <th>Birthdate</th>
+        <th>Age</th>
+        <th>Package Code</th>
+       </tr>
+    </thead>
+    <tbody>
+      <%# <% raise @acu_schedule_members %1> %>
+      <%= for acu_schedule_member <- @acu_schedule_members do %>
+        <tr>
+          <td><input style="width:20px; height:20px" type="checkbox" class="selection" value="<%= acu_schedule_member.id %>" card_no="<%= member_card_no_checker(acu_schedule_member.loa) %>" <%= if acu_schedule_member.status == "Encoded", do: "checked" %>></td>
+          <td><%= member_card_no_checker(acu_schedule_member.loa) %></td>
+          <td><%= member_full_name(acu_schedule_member.loa) %></td>
+          <td><%= member_gender(acu_schedule_member.loa) %></td>
+          <td><%= member_birthdate(acu_schedule_member.loa) %></td>
+          <td>
+            <%= if not is_nil(acu_schedule_member.loa) do %>
+              <%= ProviderLinkWeb.LoaView.get_age(acu_schedule_member.loa.member_birth_date) %>
+            <% else %>
+              "N/A"
+            <% end %>
+          </td>
+          <%= if not is_nil(acu_schedule_member.loa) and not Enum.empty?(acu_schedule_member.loa.loa_packages) do %>
+            <td><%= List.first(acu_schedule_member.loa.loa_packages).code %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <label><span id="selected_members"><%= count(@acu_schedule.acu_schedule_members) %></span> out of <%= Enum.count(@acu_schedule.acu_schedule_members) %> have been selected</label>
+  <br />
+  <u id="result">
+    <%= if not is_nil(@asm_upload_file) do %>
+      <a style="cursor: pointer" class="download" asm_upload_logs_id="<%= @asm_upload_file.id %>" file_name="<%= @asm_upload_file.filename %>">Download Result</a>
+    <% end %>
+  </u>
+  <br />
+
+   <button type="button" class="ui basic primary button" id="acuSchedCancel"><i class="remove icon"></i>
+    Cancel
+   </button>
+
+    <button class="ui right floated primary button" type="button" id="next">
+      Next
+      <i class="chevron right icon"></i>
+    </button>
+  <% end %>
+</div>
+
+<div class="ui small modal" id="cancelmodal">
+  <div class="header">
+    Cancel submission of ACU availments?
+  </div>
+  <div class="actions">
+    <button type="button" class="ui red deny button"><i class="remove icon"></i>No, keep encoding ACU availments</button>
+    <a href="/acu_schedules" class="ui primary button"><i class="check mark icon"></i>
+      Yes, cancel encoding</a>
+  </div>
+</div>
+
+<div class="ui small modal" id="upload_modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Upload File
+  </div>
+  <div class="content">
+    <div class="ui segment">
+      <div class="ui grid">
+      <div class="sixteen wide column">
+        <%= form_for @conn, acu_schedule_path(@conn, :upload_asm), [multipart: true, as: "acu_schedule_member", id: "form"], fn f -> %>
+          <%= file_input f, :file, accept: "application/csv", style: "width: 650px;", id: "upload" %>
+        <% end %>
+      </div>
+      <div class="one wide column" style="margin-right: -5px;" id="icon">
+        <i class="large file alternate outline icon"></i>
+      </div>
+      <div class="fifteen wide column" id="success">
+          <div class="status" style="margin-left: 10px;">Upload Successful</div>
+          <span id="select" style="float: right; margin-right: 20px; margin-top: -20px" class="ui right floated"></span>
+          <br />
+          <u id="dl" style="float: right; margin-right: 20px; margin-top: -20px"></u>
+      </div>
+    </div>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ui fluid primary button" style="margin-left: -3px" type="button" id="proceed"><b>Proceed</b></button>
+  </div>
+  <div id="overlay" style="display: none" class="ui active inverted dimmer"><div class="ui text loader">loading</div></div>
+</div>
+
+<div class="ui small modal" id="reupload_modal">
+  <i class="close icon"></i>
+  <div class="header">
+     Re-upload file?
+  </div>
+  <div class="content">
+    Uploading a new file will disregard the previously uploaded file.
+  </div>
+  <div class="actions">
+    <button type="button" class="ui red deny button"><i class="remove icon"></i>Cancel</button>
+    <button type="button" id="reupload_member" class="ui primary button"><i class="check mark icon"></i>
+      Upload</button>
+  </div>
+</div>
+
+<input type="hidden" id="account_code" value="<%= @acu_schedule.account_code %>">
+<input type="hidden" id="batch_no" value="<%= @acu_schedule.batch_no %>">
+<input type="hidden" id="reupload" value="<%= check_upload(@asm_upload_file) %>">
+<input type="hidden" id="as_id" value="<%= @acu_schedule.id %>">

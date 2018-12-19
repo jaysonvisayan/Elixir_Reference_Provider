@@ -1,0 +1,39 @@
+@import '../variables';
+.ui {
+    &.form {
+        .fields .field .ui.input input,
+        .field .ui.input input {
+            width: 100%;
+        }
+        textarea {
+            font-family: 'Lato';
+        }
+        input[type="number"].member-card-number {
+            width: 25%;
+            text-align: center;
+        }
+        .field>label {
+            font-weight: normal;
+        }
+        .field .label-title {
+            font-size: 14px;
+            color: $black_2;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+        .field input {
+            &[type="date"],
+            &[type="text"] {
+                color: rgba(0, 0, 0, 1);
+            }
+        }
+    }
+}
+
+input {
+    &::-webkit-input-placeholder,
+    &::-moz-placeholder,
+    &:-ms-input-placeholder {
+        font-weight: 100;
+    }
+}

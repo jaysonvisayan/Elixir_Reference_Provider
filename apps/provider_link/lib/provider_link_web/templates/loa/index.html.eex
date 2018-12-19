@@ -1,0 +1,116 @@
+<div class="ui container" id="add_to_cart">
+  <div class="ui grid">
+    <p class="info-content">LOAs</p>
+
+    <div class="ui top attached tabular menu">
+      <a class="item" data-tab="consult">Consult</a>
+      <a class="item" data-tab="lab">OP Laboratory</a>
+      <a class="item" data-tab="ip">IP</a>
+      <a class="item" data-tab="er">ER</a>
+      <a class="item active" data-tab="acu">ACU</a>
+      <a class="item" data-tab="peme">PEME</a>
+      <div class="right menu">
+        <div class="ui dropdown item">
+            <%# <a class="item" id="cart_list" href="/loas/show_loa_cart"><i class="shopping cart large icon"></i> %>
+            <%#   <div class="ui red horizontal tiny circular float-right label mrg0B" id="count"><%= Enum.count(@loa_carts) %1></div> %>
+            <%# </a> %>
+            <%# <div class="menu"> %>
+            <%#   <%= if Enum.empty?(@loa_carts) do %1> %>
+            <%#     <div class="item" id="loa_cart"> %>
+            <%#       <div class="two fields"> %>
+            <%#         <div class="six wide field"> %>
+            <%#           No Records Found. %>
+            <%#         </div> %>
+            <%#       </div> %>
+            <%#     </div> %>
+            <%#   <% else %1> %>
+            <%#   <br /> %>
+            <%#   <div class="ui category search" style="width:300px;margin-left: 10px;margin-right: 10px" id="search_append"> %>
+            <%#     <div class="ui grid"> %>
+            <%#       <div class="row"> %>
+            <%#         <div class="four wide column"> %>
+            <%#           <label style="color:black"> List of LOA </label> %>
+            <%#         </div> %>
+            <%#         <div class="three wide column"></div> %>
+            <%#         <div class="nine wide column"> %>
+            <%#           <div class="ui icon small fluid input"> %>
+            <%#             <input type="text" placeholder="Search" id="cart_search"> %>
+            <%#             <i class="search link icon"></i> %>
+            <%#           </div> %>
+            <%#         </div> %>
+            <%#       </div> %>
+            <%#     </div> %>
+            <%#   </div> %>
+              <%# <%= for acu <- @loa_carts do %1> %>
+              <%#   <div class="original item" id="loa_cart" loa_id="<%= acu.id %1>" style="width:300px;margin-left: 10px;margin-right: 10px" > %>
+              <%#     <div class="ui grid"> %>
+              <%#       <div class="row"> %>
+              <%#         <div class="twelve wide column"> %>
+                        <%# <a href="loas/<%= acu.id %1>/show"> LOA No: <%= acu.loa_number%>
+              <%#           Amount: <%= acu.total_amount %1><br /> %>
+              <%#           Availment Date: <%= acu.inserted_at |> DateTime.to_date() %1> %>
+              <%#         </div> %>
+              <%#           <i class="remove icon"></i> %>
+              <%#         </div> %>
+              <%#       </div> %>
+              <%#     </div> %>
+              <%#   </div> %>
+              <%#   <div class="original divider"></div> %>
+              <%# <% end %1> %>
+              <%# <p id="search_append"></p> %>
+              <%# <div class="item"  style="width:300px;margin-left: 10px;margin-right: 10px" > %>
+              <%#   <button class="ui fluid button" id="add_to_batch"> %>
+              <%#     <i class="plus icon"></i> %>
+              <%#     Add to batch %>
+              <%#   </button> %>
+              <%# </div> %>
+            <%# </div> %>
+          <%# <% end %1> %>
+      </div>
+    </div>
+  </div>
+  <%# <%= render "search_consult.html", consults: @consults, conn: @conn %1> %>
+  <%# <%= render "search_lab.html", labs: @labs %1> %>
+  <%= render "search_acu.html", acus: @acus, conn: @conn %>
+  <%= render "search_peme.html", pemes: @pemes, conn: @conn %>
+  </div>
+</div>
+
+<%# <%= render "modal_add_to_batch.html", loa_carts: @loa_carts, batch: @batch, changeset: @changeset, conn: @conn %1> %>
+
+<%# <div class="right-side-out"> %>
+<%#   <div class="right-side-out__trigger-button"> %>
+<%#     <i class="plus icon"></i> %>
+<%#     <span>New</span> %>
+<%#   </div> %>
+<%#   <div class="right-side-out__inner-wrapper"> %>
+<%#     <div class="dim text-center">Start with new member</div> %>
+<%#     <button class="ui fluid large primary button mt-3 mb-3" type="submit">Start New</button> %>
+<%#     <hr> %>
+<%#     <div class="dim text-center">Or Continue with previously saved actions</div> %>
+
+<%#     <div class="right-side-out__item"> %>
+<%#       <div class="dim text">PREVIOUSLY SAVED</div> %>
+<%#     </div> %>
+<%#     <div class="right-side-out__item"> %>
+<%#       <div class="bold"><span>Borocco, III, Jose Manuel</span><span class="float-right">Male, 32</span></div> %>
+<%#       <span>Card no.: #66215532698</span> %>
+<%#       <span class="dim">Awaiting LOA Confirmation</span> %>
+<%#     </div> %>
+<%#     <div class="right-side-out__item"> %>
+<%#       <div class="bold"><span>Stacey Ng</span><span class="float-right">Female, 28</span></div> %>
+<%#       <span>Card no.: #66215732698</span> %>
+<%#       <span class="dim">Awaiting LOA Confirmation</span> %>
+<%#     </div> %>
+<%#     <div class="right-side-out__item"> %>
+<%#       <div class="bold"><span>Dale Fletcher</span><span class="float-right">Male, 35</span></div> %>
+<%#       <span>Card no.: #66321323123</span> %>
+<%#       <span class="dim">Awaiting LOA Confirmation</span> %>
+<%#     </div> %>
+<%#     <div class="right-side-out__item"> %>
+<%#       <div class="bold"><span>Ian Norris</span><span class="float-right">Male, 35</span></div> %>
+<%#       <span>Card no.: #64212341232</span> %>
+<%#       <span class="dim">Awaiting LOA Confirmation</span> %>
+<%#     </div> %>
+<%#   </div> %>
+<%# </div> %>

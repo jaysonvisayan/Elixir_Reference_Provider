@@ -1,0 +1,126 @@
+<div class="ui bottom attached tab segment active" data-tab="acu">
+  <div class="ui equal width form" id="loa_acu_search">
+    <!--    <div class="ui labeled floated right" style="float: right;">LOA Amount: <a id="cartTotal" style="font-weight: bold; font-size: large;"> &#8369; <%= get_total_amount(@acus)%> </a></div>-->
+    <%# </br> %>
+    <%# </br> %>
+    <div class="fields">
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="range_start_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Date From" role="mask" class="date_mask" id="start_date_acu">
+          </div>
+        </div>
+      </div>
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="range_end_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Date To" role="mask" class="date_mask" id="end_date_acu">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="Transaction ID/LOA Number" id="loa_no_acu" style="width: 15rem" >
+      </div>
+
+      <div class="field" id="payor">
+        <select class="ui fluid search dropdown" id="acu_payor">
+         <option value="">Payor</option>
+         <option value="Maxicare">Maxicare</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="Status" id="acu_status">
+      </div>
+
+      <div class="field">
+        <div class="ui primary buttons">
+          <div class="ui button" id="btn_search_acu"><i class="search icon"></i>Search</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="div_acu">
+    <table class="ui celled table big-table" style="width: 100%" id="tbl_acu">
+      <thead>
+        <tr>
+          <td><input type="checkbox" style="width:20px; height:20px; margin-left:13px" id="checkAllacu"></td>
+          <td class="bold dim">MEMBER INFORMATION</td>
+          <td class="bold dim">PAYOR</td>
+          <td class="bold dim">ISSUED DATE/TIME</td>
+          <td class="bold dim">AMOUNT</td>
+          <td class="bold dim">STATUS</td>
+          <td class="bold dim">LOA NUMBER</td>
+        </tr>
+      </thead>
+      <tbody>
+
+        <%= for acu <- @acus do %>
+          <tr>
+            <td>
+                  <%= if acu.status == "Approved" && acu.is_cart == false && acu.is_batch == false do %>
+                    <input totalamount="<%= if is_nil(acu.total_amount) do "" else acu.total_amount |> Decimal.round(2) end %>" style="width:20px; height:20px" type="checkbox" class="selection" value="<%= acu.id %>" id="acu_loa_ids" data-value="<%= acu.id %>">
+                  <% else %>
+                    <input style="width:20px; height:20px" type="checkbox" id="acu_loa_ids" class="selection" value="" data-value="<%= acu.id %>" disabled>
+                  <% end %>
+            </td>
+            <td>
+              <a href="loas/<%= acu.id %>/show"><div>Card No.: <%= format_card_no(acu.member_card_no) %></div></a>
+                      <div>Gender: <%= acu.member_gender %></div>
+            </td>
+            <td><%= if is_nil(acu.payor) do "" else acu.payor.name end %></td>
+            <td><%= if not is_nil(acu.issue_date), do: format_datetime(acu.issue_date) %></td>
+            <td class="bold"><%= if is_nil(acu.total_amount) do "" else acu.total_amount |> Decimal.round(2) end %></td>
+            <td>
+              <%= cond do %>
+                <% acu.status == "" -> %>
+                  <div class="tag tag--blue">draft</div>
+                  <% is_nil(acu.status) -> %>
+                    <div class="tag tag--blue">draft</div>
+                    <% String.downcase(acu.status) == "draft" -> %>
+                      <div class="tag tag--blue"><%= acu.status %></div>
+                      <% String.downcase(acu.status) == "pending" -> %>
+                        <div class="tag tag--orange"><%= acu.status %></div>
+                        <% String.downcase(acu.status) == "approved" -> %>
+                          <div class="tag tag--green"><%= acu.status %></div>
+                          <% String.downcase(acu.status) == "cancelled" -> %>
+                            <div class="tag tag--black"><%= acu.status %></div>
+                            <% String.downcase(acu.status) == "disapproved" -> %>
+                              <div class="tag tag--red"><%= acu.status %></div>
+                              <% String.downcase(acu.status) == "availed" -> %>
+                                <div class="tag tag--green"><%= acu.status %></div>
+                                <% String.downcase(acu.status) == "forfeited" -> %>
+                                  <div class="tag tag--red"><%= acu.status %></div>
+                                  <% true -> %>
+                                    <div class="tag tag--orange"><%= acu.status %></div>
+                                  <% end %>
+            </td>
+            <td><%= acu.loa_number %></td>
+          </tr>
+        <% end %>
+        <%# <% end %1> %>
+      </tbody>
+      <%# <tfoot> %>
+      <%#   <%= if not Enum.empty?(@acus) do %1> %>
+      <%#     <tr> %>
+      <%#       <td> %>
+      <%#         <%= form_for @conn, loa_path(@conn, :add_to_cart), [id: "add-to-cart", multipart: true, as: :loa], fn _f -> %1> %>
+      <%#           <input type="hidden" name="loa[loa_ids]" id="loa_ids_acu"/> %>
+      <%#           <button class="ui basic blue button disabled" id="add_to_cart_acu" type="submit"> %>
+      <%#             <i class="plus icon"></i> %>
+      <%#             ADD TO CART %>
+      <%#           </button> %>
+      <%#         <% end %1> %>
+      <%#       </td> %>
+      <%#     </tr> %>
+      <%#   <% end %1> %>
+      <%# </tfoot> %>
+    </table>
+  </div>
+</div>

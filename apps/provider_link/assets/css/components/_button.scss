@@ -1,0 +1,69 @@
+@import '../variables';
+.ui.primary {
+    &.buttons .button,
+    &.button {
+        background-color: $brand_color;
+    }
+}
+
+.ui.button {
+    background-color: $brand_color;
+    color: $white;
+    font-weight: 300;
+    margin-top: 2rem;
+}
+
+.cancel {
+    color: $brand_color;
+    padding-top: 1rem;
+    font-weight: 700;
+}
+
+.ui.basic.button.button-no {
+    color: $brand_color !important;
+    border: 1px solid $brand_color;
+    box-shadow: none;
+    .remove.icon {
+        color: $brand_color;
+    }
+}
+
+.ui.basic.button.plus {
+    margin-top: 0;
+    border: 1px solid $brand_color;
+    box-shadow: none;
+    color: $brand_color !important;
+}
+
+.right-side-out__trigger-button {
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    left: -5rem;
+    background: $brand_color;
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: $white;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+    text-transform: uppercase;
+    box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.15);
+}
+
+.ui.paylink {
+    &.buttons .button,
+    &.button {
+        background-color: $paylink;
+    }
+}
+
+.ui.inverted.paylink {
+    &.buttons .button,
+    &.button {
+        background-color: $paylink;
+    }
+}

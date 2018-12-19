@@ -1,0 +1,70 @@
+<div class="ui small modal" id="peme_modal_option_qrcode">
+  <i class="close icon"></i>
+  <div class="header">
+    Member Authentication
+  </div>
+  <div class="content">
+    <input type="hidden" name="_csrf_token" value="<%= Plug.CSRFProtection.get_csrf_token() %>">
+        <select id="source" class="ui selection fluid dropdown"></select>
+         <input type="button" value="Scan" class="ui primary fluid button" id="acquired_img"/>
+    <br />
+    <div style="display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;">
+      <div style="width: 350px" id="dwtcontrolContainer"></div>
+    </div>
+    <p role="append2"></p>
+
+    <%# <br /> %>
+    <%# <div style="text-align: center"> %>
+      <%#   <div class="ui compact icon menu" style="max-height: 1rem"> %>
+        <%#     <a onclick="btnFirstImage_onclick()" class="item"> %>
+          <%#       <i class='step backward icon'></i> %>
+          <%#     </a> %>
+        <%#     <a onclick="btnPreImage_onclick()" class="item"> %>
+          <%#       <i class='chevron left icon'></i> %>
+          <%#     </a> %>
+        <%#     <div style="font-size: 1.8rem;border: 1px solid rgba(34, 36, 38, 0.15)"> %>
+          <%#       &nbsp;&nbsp; %>
+          <%#       <span id="DW_CurrentImage" style="text-align: right">0</span> %>
+          <%#       <span>/</span> %>
+          <%#       <span id="DW_TotalImage">0</span> %>
+          <%#       &nbsp;&nbsp; %>
+          <%#     </div> %>
+        <%#     <a onclick="btnNextImage_onclick()" class="item"> %>
+          <%#       <i class='chevron right icon'></i> %>
+          <%#     </a> %>
+        <%#     <a onclick="btnLastImage_onclick()" class="item"> %>
+          <%#       <i class='step forward icon'></i> %>
+          <%#     </a> %>
+        <%#   </div> %>
+      <%#   <br /><br /> %>
+      <%#   Preview Mode: %>
+      <%#   <select id="DW_PreviewMode" class="ui dropdown" onchange="setlPreviewMode();"> %>
+        <%#     <option value="0">1X1</option> %>
+        <%#     <option value="1">2X2</option> %>
+        <%#     <option value="2">3X3</option> %>
+        <%#     <option value="3">4X4</option> %>
+        <%#     <option value="4">5X5</option> %>
+        <%#   </select> %>
+      <%#   <br /> %>
+      <%# </div> %>
+    <%# <br/> %>
+    <%# <div class="ui fluid buttons"> %>
+      <%#   <button onclick="btnRemoveSelectedImages_onclick()" class="ui button">Remove Selected Images</button> %>
+      <%#   <button onclick="btnRemoveAllImages_onclick()" class="ui button">Remove All Images</button> %>
+      <%# </div> %>
+  </div>
+  <div class="actions">
+    <div class="ui button" id="peme_choose_other_options_qrcode">Cancel</div>
+      <div class="ui primary button" id="qr_verify_image">Verify</div>
+  </div>
+</div>
+
+  <!-- Dynamic Twain -->
+  <script src="<%= static_path(@conn, "/resources/dynamsoft.webtwain.initiate.js") %>"></script>
+  <script src="<%= static_path(@conn, "/resources/dynamsoft.webtwain.config.js") %>"></script>
+  
+  <!-- End of Dynamic Twain -->

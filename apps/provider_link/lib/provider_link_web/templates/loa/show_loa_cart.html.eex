@@ -1,0 +1,106 @@
+<div class="ui container" id="add_to_cart">
+  <div class="ui grid">
+    <p class="info-content">Cart<i class="shopping cart icon"></p></i>
+      <div class="bold dim" style="color: grey">
+        <span>PAYOR</span>
+        <div style="color: #2185D0"><%= loa_cart_payor(@loas) %></div>
+      </div>
+      <div class="bold dim" style="color: grey">
+        <span>LOA COUNT</span>
+        <div style="color: #2185D0"><%= loa_cart_count(@loas) %></div>
+      </div>
+      <div class="bold dim" style="color: grey">
+        <span>LOA AMOUNT</span>
+        <div style="color: #2185D0"><%= loa_cart_amount(@loas) %></div>
+      </div>
+      <div class="bold dim" style="color: grey">
+        <span>COVERAGE</span>
+        <div style="color: #2185D0"><%= loa_cart_coverage(@loas) %></div>
+      </div>
+  </div>
+
+  <table class="ui celled table big-table" id="cart_table" style="width: 100%" id="tbl_acu">
+    <thead>
+      <tr>
+        <%# <td><input type="checkbox" style="width:20px; height:20px; margin-left:13px" id="checkAllacu"></td> %>
+        <td class="bold dim">MEMBER INFORMATION</td>
+        <td class="bold dim">TRANSACTION ID</td>
+        <td class="bold dim">LOA NUMBER</td>
+        <td class="bold dim">COVERAGE</td>
+        <td class="bold dim">ISSUED DATE/TIME</td>
+        <td class="bold dim">AMOUNT</td>
+        <td class="bold dim">STATUS</td>
+        <td class="bold dim">ACTION</td>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for loa <- @loas do %>
+        <tr>
+          <td>
+            <a href="loas/<%= loa.id %>/show"><div>Card No.: <%= format_card_no(loa.member_card_no) %></div></a>
+            <div>Age: <%= get_age(loa.member_birth_date) %> </div>
+            <%# <div>Birth Date: <%= format_date(acu.card.member.birth_date) %1></div> %>
+            <div>Gender: <%= loa.member_gender %></div>
+          </td>
+          <td>
+            <div><%= loa.transaction_id %></div>
+          </td>
+          <td>
+            <div><%= loa.loa_number %></div>
+          </td>
+          <td>
+            <div><%= loa.coverage %></div>
+          </td>
+          <td>
+            <%= if not is_nil(loa.issue_date), do: format_datetime(loa.issue_date) %>
+          </td>
+          <td class="bold">
+            <%= if is_nil(loa.total_amount) do "" else loa.total_amount |> Decimal.round(2) end %>
+          </td>
+          <td>
+            <%= cond do %>
+              <% loa.status == "" -> %>
+                <div class="tag tag--blue">draft</div>
+              <% is_nil(loa.status) -> %>
+                <div class="tag tag--blue">draft</div>
+              <% String.downcase(loa.status) == "draft" -> %>
+                <div class="tag tag--blue"><%= loa.status %></div>
+              <% String.downcase(loa.status) == "pending" -> %>
+                <div class="tag tag--orange"><%= loa.status %></div>
+              <% String.downcase(loa.status) == "approved" -> %>
+                <div class="tag tag--green"><%= loa.status %></div>
+              <% String.downcase(loa.status) == "cancelled" -> %>
+                <div class="tag tag--black"><%= loa.status %></div>
+              <% String.downcase(loa.status) == "disapproved" -> %>
+                <div class="tag tag--red"><%= loa.status %></div>
+              <% String.downcase(loa.status) == "availed" -> %>
+                <div class="tag tag--green"><%= loa.status %></div>
+              <% String.downcase(loa.status) == "forfeited" -> %>
+                <div class="tag tag--red"><%= loa.status %></div>
+              <% true -> %>
+                <div class="tag tag--orange"><%= loa.status %></div>
+            <% end %>
+          </td>
+          <td>
+            <div>
+              <%= link to: loa_path(@conn, :remove_to_cart_page, loa), method: :delete, data: [confirm: "Are you sure?"] do %> <i class="red trash link icon"></i> <% end %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+      <%# <% end %1> %>
+    </tbody>
+    <tfoot>
+    </tfoot>
+  </table>
+
+  <a class="ui basic blue button" href="/loas">Cancel</a>
+  <button class="ui blue button" id="add_to_batch" type="submit">
+    <i class="plus icon"></i>
+    Add to batch
+  </button>
+
+<%= render "modal_add_to_batch.html", loas: @loas, batch: @batch, changeset: @changeset, conn: @conn %>
+
+  </div>
+</div>

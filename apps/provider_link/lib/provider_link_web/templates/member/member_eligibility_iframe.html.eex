@@ -1,0 +1,5 @@
+<div id="iframe"></div>
+<input type="hidden" id="coverage">
+<input type="hidden" id="card_number">
+<input type="hidden" id="paylink_user_id" value="<%= @user.paylink_user_id %>">
+<%= render ProviderLinkWeb.PageView, "modal_iframe.html", paylink_user_id: @user.paylink_user_id, card_number: @card_number, member: @member %>

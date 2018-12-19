@@ -1,0 +1,83 @@
+<% # TODO: List all ACU Schedules %>
+<div class="ui main container" id="acu_schedule_member">
+  <div class="ui grid">
+    <div class="sixteen wide column">
+      <div class="ui right aligned grid">
+        <div class="left floated left aligned eight wide column">
+          <h1 class="ui huge header with-button">ACU Members</h1>
+        </div>
+        <div class="right floated right aligned eight wide column">
+        </div>
+      </div>
+      <!--<h1 class="ui huge header">Account</h1>-->
+      <div class="ui breadcrumb"</div>
+      <div class="ui divider"></div>
+    </div>
+  </div>
+  <%= form_for @changeset, acu_schedule_path(@conn, :update_member_schedule, @acu_schedule), [as: :acu_schedule_member, class: "form2"], fn _f -> %>
+  <input type="hidden" id="hidden_acu" value="" name="acu_schedule_member[acu_schedule_member_ids_main]">
+  <table role="datatable" class="ui very basic striped selectable table" cellspacing="0" width="100%" id="acu_mobile_table">
+    <thead>
+      <tr>
+        <th><input type="checkbox" style="width:20px; height:20px" id="select_all"></th>
+
+        <th>Card No.</th>
+        <th>Full Name</th>
+        <th>Gender</th>
+        <th>Birthdate</th>
+        <th>Age</th>
+        <th>Package Code</th>
+       </tr>
+    </thead>
+    <tbody>
+      <%= for acu_schedule_member <- @acu_schedule_members do %>
+        <tr>
+          <td><input style="width:20px; height:20px" type="checkbox" class="selection" value="<%= acu_schedule_member.id %>"></td>
+          <td><%= member_card_no_checker(acu_schedule_member.loa) %></td>
+          <td><%= member_full_name(acu_schedule_member.loa) %></td>
+          <td><%= member_gender(acu_schedule_member.loa) %></td>
+          <td><%= member_birthdate(acu_schedule_member.loa) %></td>
+          <td>
+            <%= if not is_nil(acu_schedule_member.loa) do %>
+              <%= ProviderLinkWeb.LoaView.get_age(acu_schedule_member.loa.member_birth_date) %>
+            <% else %>
+              "N/A"
+            <% end %>
+          </td>
+          <%= if not is_nil(acu_schedule_member.loa) and not Enum.empty?(acu_schedule_member.loa.loa_packages) do %>
+            <td><%= List.first(acu_schedule_member.loa.loa_packages).code %></td>
+          <% else %>
+            <td></td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+         <%# <a href="/acu_schedules" class="ui basic primary button"><i class="remove icon"></i> %>
+         <%#    Cancel</a> %>
+
+       <a class="ui basic primary button" id="acuSchedCancel"><i class="remove icon"></i>
+        Cancel
+       </a>
+
+
+
+      <%# </button> %>
+      <button class="ui right floated primary button">
+        Next
+        <i class="chevron right icon"></i>
+      </button>
+  <% end %>
+</div>
+
+<div class="ui modal" id="cancelmodal">
+  <div class="header">
+    Cancel submission of ACU availments?
+  </div>
+  <div class="actions">
+    <a href="/acu_schedules" class="ui primary button"><i class="check mark icon"></i>
+      Yes, cancel encoding<a>
+        <a href= "" class="ui red button"><i class="remove icon"></i>No, keep encoding ACU availments</button></a>
+  </div>
+
+

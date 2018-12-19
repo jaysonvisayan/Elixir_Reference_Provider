@@ -1,0 +1,118 @@
+  <div class="ui container" id="card_no_cvv_verify">
+    <div class="ui grid">
+      <div class="row">
+        <div class="sixteen wide computer sixteen wide tablet sixteen wide mobile column">
+          <span class="info-title">Member</span>
+          <span class="bold fs-20"><%= @loa.card.member.first_name <> " "%><%=  @loa.card.member.middle_name || "" <> " " %><%= @loa.card.member.last_name%></span>
+        </div>
+        <p class="sixteen wide mobile only column"><a class="modal-open-main">View Member's Detailed Info</a></p>
+      </div>
+      <div class="row">
+        <div class="six wide computer eight wide tablet sixteen wide mobile column">
+          <span class="info-title">Request for Member</span>
+          <span class="bold fs-20">ACU Request Confirmation</span>
+          <div class="ui items">
+            <div class="item">
+
+              <div class="scrolling content">
+                <form class="ui form">
+                  <div class="member-card-wrapper">
+                    <div class="fs-20 bold mb-2 text-center">Member Card</div>
+                    <p class="member-card-label mt-16">Swipe or Enter 16-digit card no</p>
+                    <div class="ui input">
+                      <input style="border-radius: 0px;" class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="for_otp_cardno1" placeholder="_ _ _ _">
+                      <input style="border-radius: 0px;" class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="for_otp_cardno2" placeholder="_ _ _ _">
+                      <input style="border-radius: 0px;" class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="for_otp_cardno3" placeholder="_ _ _ _">
+                      <input style="border-radius: 0px;" class="member-card-number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="number" maxlength="4" name="for_otp_cardno4" placeholder="_ _ _ _">
+                      <input id="card" type="hidden">
+                    </div>
+                    <div class="member-card-photo mt-4">
+                    </div>
+                    <p class="member-card-label mb-0">Enter 3-digit card cvv</p>
+                    <p class="sub-content">(found on the back of the card, on the signature panel)</p>
+                    <div class="ui grid">
+                      <div class="six wide column">
+                        <input class="ui fluid input cvv" type="text" maxlength="3" name="for_otp_cvv" id="cvv" placeholder="_ _ _">
+                        <input type="hidden" name="number" id="number">
+                        <input type="hidden" name="member_id" id="member_id">
+                        <input type="hidden" name="link" id="link" value="">
+                      </div>
+
+                      <div class="two wide column">
+                        <i class="big credit card alternative icon"></i>
+                      </div>
+
+                    </div>
+                    <br />
+                  </div>
+
+                  <p role="append"></p>
+                  <button type="button" class="ui fluid large primary button" id="btn_card_no_cvv_verify">Proceed</button>
+                </form>
+
+                <div class="new-method-wrapper mt-4 text-center">
+                  <a style="cursor: pointer" id="choose_other_options_card">
+                    <p class="new-method-title">Member doesn't have a card now?</p>
+                    <p class="new-method-title"><b>Try another method</b></p>
+                    <div class="mt-3">
+                      <p class="new-method-content">Enter Member's Name and Birthdate to continue <br/>(Required OTP authentication)</p>
+                    </div>
+                  </a>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+          <input type="hidden" id="loa_id" value="<%= @loa.id %>" >
+        </div>
+        <div class="six wide computer only eight wide tablet onlly right floated column">
+          <div class="ui segment secondary">
+            <p class="segment-title">Member</p>
+            <p class="segment-content-bold"><%= format_name_last(@loa.card.member) %></p>
+            <p class="segment-content">Card No.: <%= @loa.card.number %></p>
+            <p class="segment-content">DOB: <%= format_date(@loa.card.member.birth_date) %></p>
+            <p class="segment-content">Age: <%= get_age(@loa.card.member.birth_date) %></p>
+            <p class="segment-content">Gender: <%= @loa.card.member.gender %></p>
+            <div class="segment-gap"></div>
+            <p class="segment-title">Provider</p>
+            <p class="segment-content-bold"><%= @provider %></p>
+            <div class="segment-gap"></div>
+            <p class="segment-title">Payor</p>
+            <p class="segment-content-bold"><%= @loa.card.member.payor.name %></p>
+            <div class="segment-gap"></div>
+            <p class="segment-title">Doctor</p>
+            <%= for loa_doctor <- @loa.loa_doctor do %>
+              <p class="segment-content">Dr. <%= format_name_first(loa_doctor.doctor) %></p>
+              <p class="segment-content">PRC <%= loa_doctor.doctor.prc_number %></p>
+              <p class="segment-content"><%= loa_doctor.doctor.specialization %></p>
+            <% end %>
+            <div class="segment-gap"></div>
+            <p class="segment-title">Assessed Amount</p>
+            <div class="assessed-amount-wrapper">
+              <div class="assessed-amount-item">
+                <img class="mr-1" src="/images/user.png">
+                <div class="content">
+                  <p class="segment-content">Member Pays <br/> Php. 60</p>
+                </div>
+              </div>
+              <div class="assessed-amount-item">
+                <img class="mr-1" src="/images/heart.png">
+                <div class="content">
+                  <p class="segment-content">Maxicare Pays <br/>Php. 400</p>
+                </div>
+              </div>
+              <div class="assessed-amount-item">
+                <div class="content">
+                  <p class="segment-content"><b>Total<br/>Php.460</b></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<%= render "otp_success.html" %>
+<%= render "otp_failed.html" %>

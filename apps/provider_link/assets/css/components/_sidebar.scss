@@ -1,0 +1,49 @@
+@import '../variables';
+.ui {
+    &.left.visible.sidebar {
+        padding-top: 58px;
+        box-shadow: none;
+        border: none;
+        border-right: 1px solid rgba(34, 36, 38, 0.15);
+        .item {
+            height: 80px;
+        }
+        &.menu {
+            a {
+                &.item {
+                    &:first-child:before {
+                        display: none !important;
+                    }
+                    p {
+                        color: $gray;
+                    }
+                    .svg-fill {
+                        fill: $gray;
+                    }
+                }
+                &:before {
+                    display: none;
+                }
+                &:hover {
+                    p {
+                        color: rgba(42, 121, 255, 0.5);
+                    }
+                    .svg-fill {
+                        fill: rgba(42, 121, 255, 0.5);
+                    }
+                }
+            }
+            .active.item {
+                background: none;
+                border: none;
+                border-radius: 0 !important;
+                .svg-fill {
+                    fill: $brand_color;
+                }
+                p {
+                    color: $brand_color;
+                }
+            }
+        }
+    }
+}

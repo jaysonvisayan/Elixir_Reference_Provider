@@ -1,0 +1,393 @@
+before_script:
+  - export PROVIDERLINK_VERSION=2.8.0
+  - export WORKER_VERSION=0.2.2
+  - export SCHEDULER_VERSION=0.1.13
+  - mix deps.get
+  - mix compile
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - deps/
+  - _build/
+
+stages:
+  - test
+  - build
+  - deploy
+  - migrate
+
+test:
+  stage: test
+  only:
+    - branches
+  tags:
+    - test
+  script:
+    - MIX_ENV=test mix ecto.setup-no-seed
+    - mix test
+
+# IST env
+build-providerlink to ist:
+  stage: build
+  environment:
+    name: ist
+    url: https://providerlink-ip-ist.medilink.com.ph/
+  only:
+    - ist/providerlink
+  tags:
+    - builder
+  script:
+    - git branch -f master HEAD
+    - cd apps/provider_link
+    - mix edeliver build release
+
+deploy-providerlink to ist:
+  stage: deploy
+  environment:
+    name: ist
+    url: https://providerlink-ip-ist.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - ist/providerlink
+  script:
+    - cd apps/provider_link
+    - mix edeliver deploy release to staging --version=${PROVIDERLINK_VERSION}
+    - ssh medi@172.16.45.5 services/providersuite/restart-providerlink-service.sh # ist-node1
+    - ssh medi@172.16.45.44 services/providersuite/restart-providerlink-service.sh # ist-node2
+    - ssh medi@172.16.24.181 services/providersuite/restart-providerlink-service.sh # migration-node1
+    - ssh medi@172.16.24.182 services/providersuite/restart-providerlink-service.sh # migration-node2
+
+migrate-providerlink ist:
+  stage: migrate
+  environment:
+    name: ist
+    url: https://providerlink-ip-ist.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - ist/providerlink
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-ist.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+    - source /home/gitlab-runner/providersuite/migrate-migration.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+    # - source /home/gitlab-runner/providersuite/migrate-autotest.env
+    # - MIX_ENV=prod mix ecto.setup-no-seed
+
+build-worker:
+  stage: build
+  environment:
+    name: ist
+  only:
+    - ist/worker
+  tags:
+    - builder
+  script:
+    - git branch -f master HEAD
+    - cd apps/provider_worker
+    - mix edeliver build release
+
+deploy-worker to ist:
+  stage: deploy
+  environment:
+    name: ist
+  tags:
+    - builder
+  only:
+    - ist/worker
+  script:
+    - cd apps/provider_worker
+    - mix edeliver deploy release to staging --version=${WORKER_VERSION}
+    - ssh medi@172.16.45.27 services/providersuite/restart-worker-service.sh # worker-ist-node1
+    - ssh medi@172.16.45.29 services/providersuite/restart-worker-service.sh # worker-ist-node2
+    - ssh medi@172.16.20.182 services/providersuite/restart-worker-service.sh # worker-migration-node
+
+migrate-worker ist:
+  stage: migrate
+  environment:
+    name: ist
+  tags:
+    - builder
+  only:
+    - ist/worker
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-ist.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+    - source /home/gitlab-runner/providersuite/migrate-migration.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# SCHEDULER
+build-scheduler to ist:
+  stage: build
+  environment:
+    name: ist
+  only:
+    - ist/scheduler
+  tags:
+    - builder
+  script:
+    - git branch -f master HEAD
+    - cd apps/provider_scheduler
+    - mix edeliver build release
+
+deploy-scheduler to ist:
+  stage: deploy
+  environment:
+    name: ist
+  tags:
+    - builder
+  only:
+    - ist/scheduler
+  script:
+    - cd apps/provider_scheduler
+    - mix edeliver deploy release to staging --version=${SCHEDULER_VERSION}
+    - ssh medi@172.16.45.24 services/providersuite/restart-scheduler-service.sh #ist
+
+migrate-scheduler ist:
+  stage: migrate
+  environment:
+    name: ist
+  tags:
+    - builder
+  only:
+    - ist/scheduler
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-ist.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# UAT Env
+# PROVIDERLINK
+deploy-providerlink to uat:
+  stage: deploy
+  environment:
+    name: uat
+    url: https://providerlink-ip-uat.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - uat/providerlink
+  script:
+    - cd apps/provider_link
+    - mix edeliver deploy release to uat --version=${PROVIDERLINK_VERSION}
+    - ssh medi@172.16.45.22 services/providersuite/restart-providerlink-service.sh # uat-node1
+    - ssh medi@172.16.45.25 services/providersuite/restart-providerlink-service.sh # uat-node2
+
+migrate-providerlink uat:
+  stage: migrate
+  environment:
+    name: uat
+    url: https://providerlink-ip-uat.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - uat/providerlink
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-uat.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# WORKER
+deploy-worker to uat:
+  stage: deploy
+  environment:
+    name: uat
+  tags:
+    - builder
+  only:
+    - uat/worker
+  script:
+    - cd apps/provider_worker
+    - mix edeliver deploy release to uat --version=${WORKER_VERSION}
+    - ssh medi@172.16.45.34 services/providersuite/restart-worker-service.sh #worker-uat-node1
+
+migrate-worker uat:
+  stage: migrate
+  environment:
+    name: uat
+  tags:
+    - builder
+  only:
+    - uat/worker
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-uat.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# SCHEDULER
+build-scheduler to uat:
+  stage: build
+  environment:
+    name: uat
+  only:
+    - uat/scheduler
+  tags:
+    - builder
+  script:
+    - git branch -f master HEAD
+    - cd apps/scheduler
+    - mix edeliver build release
+
+deploy-scheduler to uat:
+  stage: deploy
+  environment:
+    name: uat
+  tags:
+    - builder
+  only:
+    - uat/scheduler
+  script:
+    - cd apps/provider_scheduler
+    - mix edeliver deploy release to uat --version=${SCHEDULER_VERSION}
+    - ssh medi@172.16.45.48 services/providersuite/restart-scheduler-service.sh
+
+migrate-scheduler uat:
+  stage: migrate
+  environment:
+    name: uat
+  tags:
+    - builder
+  only:
+    - uat/scheduler
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-uat.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# UAT ENV HOTFIX
+# PROVIDERLINK
+build-providerlink to uat-hotfix:
+  stage: build
+  environment:
+    name: uat
+    url: https://providerlink-ip-uat.medilink.com.ph/
+  only:
+    - uat-hotfix/providerlink
+  tags:
+    - builder
+  script:
+    - git branch -f master HEAD
+    - cd apps/provider_link
+    - mix edeliver build release
+
+deploy-providerlink to uat-hotfix:
+  stage: deploy
+  environment:
+    name: uat
+    url: https://providerlink-ip-uat.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - uat-hotfix/providerlink
+  script:
+    - cd apps/provider_link
+    - mix edeliver deploy release to uat --version=${PROVIDERLINK_VERSION}
+    - ssh medi@172.16.45.22 services/providersuite/restart-providerlink-service.sh # uat-node1
+    - ssh medi@172.16.45.25 services/providersuite/restart-providerlink-service.sh # uat-node2
+
+migrate-providerlink uat-hotfix:
+  stage: migrate
+  environment:
+    name: uat
+    url: https://providerlink-ip-uat.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - uat-hotfix/providerlink
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-uat.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# SCHEDULER
+build-scheduler to uat-hotfix:
+  stage: build
+  environment:
+    name: uat
+  only:
+    - uat-hotfix/scheduler
+  tags:
+    - builder
+  script:
+    - git branch -f master HEAD
+    - cd apps/provider_scheduler
+    - mix edeliver build release
+
+deploy-scheduler to uat-hotfix:
+  stage: deploy
+  environment:
+    name: uat
+  tags:
+    - builder
+  only:
+    - uat-hotfix/scheduler
+  script:
+    - cd apps/provider_scheduler
+    - mix edeliver deploy release to uat --version=${SCHEDULER_VERSION}
+    - ssh medi@172.16.45.48 services/providersuite/restart-scheduler-service.sh #uat
+
+migrate-scheduler uat-hotfix:
+  stage: migrate
+  environment:
+    name: uat
+  tags:
+    - builder
+  only:
+    - uat-hotfix/scheduler
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-uat.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# PROD ENV
+# PROVIDERLINK
+deploy-providerlink to prod:
+  stage: deploy
+  environment:
+    name: prod
+    url: https://providerlink-prod.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - prod/providerlink
+  script:
+    - cd apps/provider_link
+    - mix edeliver deploy release to production --version=${PROVIDERLINK_VERSION}
+    - ssh medi@172.16.24.142 services/providersuite/restart-providerlink-service.sh # prod-node1
+    - ssh medi@172.16.24.143 services/providersuite/restart-providerlink-service.sh # prod-node2
+    - ssh medi@35.201.224.242 services/providersuite/restart-providerlink-service.sh # ip-app-prod-1
+
+migrate-providerlink prod:
+  stage: migrate
+  environment:
+    name: prod
+    url: https://providerlink-prod.medilink.com.ph/
+  tags:
+    - builder
+  only:
+    - prod/providerlink
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-prod.env
+    - MIX_ENV=prod mix ecto.setup-no-seed
+
+# WORKER
+deploy-worker to prod:
+  stage: deploy
+  environment:
+    name: prod
+  tags:
+    - builder
+  only:
+    - prod/worker
+  script:
+    - cd apps/provider_worker
+    - mix edeliver deploy release to production --version=${WORKER_VERSION}
+    - ssh medi@172.16.24.206 services/providersuite/restart-worker-service.sh #worker-prod-node1
+
+migrate-worker prod:
+  stage: migrate
+  environment:
+    name: prod
+  tags:
+    - builder
+  only:
+    - prod/worker
+  script:
+    - source /home/gitlab-runner/providersuite/migrate-prod.env
+    - MIX_ENV=prod mix ecto.setup-no-seed

@@ -1,0 +1,86 @@
+<div class="ui container" role="activate_user">
+  <div class="ui grid" id="activate_form">
+    <div class="row">
+      <div class="sixteen wide column">
+        <h2>Account Activation</h2>
+        <p>Your account has been activated. Please create a username and password to start using the app.</p>
+      </div>
+    </div>
+    <div class="row">
+      <!-- Activation form -->
+      <div class="six wide computer eight wide tablet sixteen wide mobile column">
+        <%= form_for @changeset, user_path(@conn, :send_activation_code, @agent), [as: :user, id: "new_form_user"], fn f -> %>
+          <div class="ui form">
+            <%= if assigns[:show_verification] do %>
+              <div>
+                <%= label f, :username, "Username" %>
+                <%= text_input f, :username, placeholder: "Create a username for your account", autofocus: "", value: @user.username, readonly: true %>
+              </div>
+
+              <div>
+                <%= label f, :password, "Password" %>
+                <%= password_input f, :password, placeholder: "Create a password", value: @user.password, readonly: true %>
+              </div>
+
+              <div>
+                <%= label f, :password_confirmation, "Confirm Password" %>
+                  <%= password_input f, :password_confirmation, placeholder: "Confirm your password", value: @user.password_confirmation, readonly: true %>
+              </div>
+              <button class="ui fluid large primary modal-open-main disabled button">Continue</button>
+            <% else %>
+              <div class="field" id="append">
+                <%= label f, :username, "Username" %>
+                <%= text_input f, :username, placeholder: "Create a username for your account", autofocus: "" %>
+                <p style="color: red"><%= error_tag f, :username %></p>
+              </div>
+
+              <div class="field">
+                <%= label f, :password, "Password" %>
+                <%= password_input f, :password, placeholder: "Create a password" %>
+                <p style="color: red"><%= error_tag f, :password %></p>
+              </div>
+
+              <div class="field">
+                <%= label f, :password_confirmation, "Confirm Password" %>
+                <%= password_input f, :password_confirmation, placeholder: "Confirm your password" %>
+                <p style="color: red"><%= error_tag f, :password_confirmation %></p>
+              </div>
+              <button type="button" class="ui fluid large primary modal-open-main button" id="submit_user_button">Continue</button>
+            <% end %>
+
+            <%# <input type="hidden" id="usernames" value="<%= @usernames %1>"> %>
+
+          </div>
+
+        <% end %>
+      </div>
+
+      <!-- User profile -->
+      <div class="six wide computer eight wide tablet sixteen wide mobile right floated column mobile-mt-3">
+        <div class="very padded center aligned secondary ui segment">
+          <div class="secondary description">
+            <div class="ui hidden divider"></div>
+            <div class="image face-image">
+              <!-- User avatar -->
+              <%# <img class="ui tiny centered circular image" src="./images/face.jpg"> %>
+            </div>
+            <h2 class="ui medium header"><%= Enum.join([@agent.first_name, @agent.middle_name, @agent.last_name, @agent.extension], " ") %></h2>
+            <div>Provider Name: <%= @agent.provider.name %></div>
+            <div>Department: <%= @agent.department %></div>
+            <div>Role: <%= @agent.role %></div>
+            <br>
+            <div>Mobile no.: <%= @agent.mobile %></div>
+            <div>Email: <%= @agent.email %></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<%= if assigns[:show_verification] do %>
+  <%= render "account_verification/show_modal.html", agent: @agent %>
+  <%= render "account_verification/success_modal.html" %>
+  <%= render "account_verification/failed_modal.html", agent: @agent %>
+<% end %>

@@ -1,0 +1,73 @@
+<div class="ui medium modal" id="modal_add_to_batch">
+  <i class="close icon"></i>
+  <div class="header">
+    Add to Batch
+    <h4 class="ui header">Please select one</h4>
+  </div>
+  <br />
+  <div class="content">
+    <div class="ui three column grid">
+      <div class="column" style="width:45%">
+        <div class="ui medium header"><center>Add to Existing Batch</center></div><br />
+        <div class="ui container">
+          <div class="ui grid">
+            <div class="sixteen wide column">
+              <a class="left floated fluid ui inverted grey button card" id="existing">
+                <br />
+                <h2 class="ui icon header">
+                  <i class="plus icon"></i>
+                  <div class="content"> Add </div>
+                  <br>
+                </h2>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="column" style="width:10%;">
+        <div class="ui vertical divider">
+          or
+        </div>
+      </div>
+      <div class="column" style="width:45%">
+        <div class="ui medium header"><center>Create new</center></div><br />
+        <div class="ui container">
+          <div class="ui grid">
+            <div class="eight wide column">
+             <% status = "disabled" %>
+              <a class="left floated fluid ui inverted grey button card <%= if loa_cart_consult_checker(@loas) == false, do: status %>" id="pf">
+                <br />
+                <h2 class="ui icon header">
+                  <i class="doctor icon"></i>
+                  <div class="content"> Practitioner </div>
+                  <br>
+                </h2>
+              </a>
+            </div>
+            <div class="eight wide column">
+              <a class="left floated fluid ui inverted grey button card" id="hb">
+                <br />
+                <h2 class="ui icon header">
+                  <i class="hospital icon"></i>
+                  <div class="content"> Hospital Bill </div>
+                  <br>
+                </h2>
+              </a>
+            </div>
+          </div>
+          <br>
+        </div>
+      </div>
+      <input type="hidden" id="type">
+      <div class="five wide column"></div>
+      <div class="six wide column" >
+        <p id="proceed"></p>
+        <button type="button" class="fluid ui primary button" id="proceed_button_add_batch">
+          Proceed
+        </button>
+      </div>
+      <div class="five wide column"></div>
+    </div>
+  </div>
+</div>
+<%= render "modal_list_batch.html", loas: @loas, conn: @conn, batch: @batch %>

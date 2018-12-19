@@ -1,0 +1,162 @@
+<div class="ui container" id="batch_details">
+  <div class="ui grid">
+    <div class="row">
+      <div class="sixteen wide column">
+        <h1 class="ui huge header">Batch Details</h1>
+      </div>
+    </div>
+    <div class="ui divider mrg0T mrg0B"></div><br />
+    <div class="ui grid">
+      <div class="row">
+        <div class="sixteen wide computer column">
+          <div class="section">
+            <div class="ui grid">
+              <div class="row">
+                <div class="sixteen wide computer eleven wide tablet sixteen wide mobile column">
+                  <div class="ui segment">
+                    <div class="content">
+                      <div class="ui right aligned grid">
+                        <div class="left floated left aligned eight wide column">
+                          <div class="header"> <h2><%= @batch.number %></h2></div>
+                        </div>
+                        <%= if String.downcase("#{@batch.status}") != "submitted" do %>
+                        <div class="right floated right aligned eight wide column">
+                          <div class="ui icon top right floated pointing dropdown">
+                            <i class="primary large ellipsis horizontal icon"></i>
+                            <div class="left menu transition hidden">
+                              <%# <div class="item" id="edit_soa"> %>
+                              <%#   Add Edited SOA Amount %>
+                              <%# </div> %>
+                                <div class="item" id="delete_batch" batch_id="<%= @batch.id %>">
+                                  Delete Batch
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <% end %>
+                      </div>
+                      <div class="ui relaxed grid">
+                        <div class="five column row">
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Batch Type</label>
+                              <div class="info__content"><%= display_batch_type(@batch) %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label style="font-weight: bold">SOA Amount</label>
+                              <div class="info__content"><%= @batch.soa_amount %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Actual SOA Amount</label>
+                              <div class="info__content"><%= display_actual_soa_amount(@batch) %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Batch Status</label>
+                              <div class="info__content"><%= @batch.status %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Created By</label>
+                              <div class="info__content"><%= display_created_by(@batch) %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">SOA Reference No.</label>
+                              <div class="info__content"><%= @batch.soa_reference_no %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Actual LOA Count</label>
+                              <div class="info__content"><%= Enum.count(@batch.batch_loas)%></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Practitioner</label>
+                              <div class="info__content"><%= display_practitioner(@batch) %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Payor</label>
+                              <div class="info__content"><%= display_payor(@batch) %></div>
+                            </div>
+                          </div>
+                          <div class="column">
+                            <div class="info">
+                              <label  style="font-weight: bold">Date Created</label>
+                              <div class="info__content"><%= @batch.inserted_at |> DateTime.to_date() %></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- .row -->
+            </div><!-- .ui.grid -->
+          </div><!-- .section -->
+<br /><br /><br/ >
+          <h2>Claims Details</h2>
+          <div class="row">
+              <table role="datatable" id="procedure_table" class="ui striped table">
+                <thead>
+                  <tr>
+                    <th>LOA No.</th>
+                    <th>Member Information</th>
+                    <th>Coverage</th>
+                    <th>Amount</th>
+                    <th>Availment Date</th>
+                    <%= if String.downcase("#{@batch.status}") != "submitted" do %>
+                    <th>Action</th>
+                    <% end %>
+                  </tr>
+                </thead>
+                <tbody>
+                    <%= for batch_loa <- Enum.sort_by(@batch.batch_loas, &(&1.inserted_at)) do %>
+                    <tr>
+                      <td><a href="/loas/<%= batch_loa.loa.id %>/show" target="_blank"><%= batch_loa.loa.loa_number %></a></td>
+                      <td><%= display_member(batch_loa.loa) %><br /><%= display_card(batch_loa.loa) %></td>
+                      <td><%= batch_loa.loa.coverage %></td>
+                      <td><%= batch_loa.loa.total_amount %></td>
+                      <td><%= batch_loa.loa.inserted_at |> DateTime.to_date() %></td>
+                      <%= if String.downcase("#{@batch.status}") != "submitted" do %>
+                      <td>
+                        <a style="cursor: pointer" class="loa_delete" loa_id="<%= batch_loa.loa.id %>" batch_id="<%= batch_loa.batch.id %>">
+                            <i class="red trash icon"></i>
+                        </a>
+                      </td>
+                    <% end %>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+          </div>
+        </div>
+      </div><!-- row ends here -->
+    </div><!-- grid ends here -->
+
+    <div class="centered row">
+      <%= if String.downcase("#{@batch.status}") != "submitted" do %>
+        <button type="button" class="ui large primary button" style="width: 250px" id="submit_batch">Submit Batch</button>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<input type="hidden" id="batch_id" value="<%= @batch.id %>">
+<%= if Enum.empty?(@loa_batch) do %>
+  <input type="hidden" id="has_loa" value="no">
+<% else %>
+  <input type="hidden" id="has_loa" value="yes">
+<% end %>
+

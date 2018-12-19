@@ -1,0 +1,81 @@
+<div class="ui container">
+  <div class="ui grid">
+
+    <div class="row">
+      <div class="six wide computer eight wide tablet sixteen wide mobile column">
+        <p class="info-title">New Request</p>
+        <p class="info-content">Request ER LOA</p>
+
+        <form class="ui form">
+          <div class="field">
+            <label class="label-title">Date</label>
+            <div class="ui calendar" id="birthDate">
+              <div class="ui input left icon">
+                <i class="calendar icon"></i>
+                <input type="text" placeholder="Date">
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label-title">Attending physician</label>
+            <input type="text" name="attending_physician" placeholder="Enter attending physician">
+          </div>
+
+          <div class="segment-gap"></div>
+
+          <div class="field">
+            <label class="label-title">Chief Complaint</label>
+            <input type="text" name="chief_complaint" placeholder="Enter chief complaint">
+          </div>
+
+          <div class="field">
+            <label class="label-title">Impression / Initial diagnosis</label>
+            <input type="text" name="impression" placeholder="Enter impression or diagnosis">
+          </div>
+
+          <div class="segment-gap"></div>
+
+          <div class="field">
+            <label class="label-title">Procedure (optional)</label>
+            <div class="fields">
+              <div class="thirteen wide field">
+                <select class="ui fluid dropdown">
+                  <option value="">Enter procedure</option>
+                  <option value="500">$500</option>
+                  <option value="1000">$1000</option>
+                  <option value="1500">$1500</option>
+                  <option value="2000">$2000</option>
+                </select>
+              </div>
+              <div class="three wide field mobile-mt-1">
+                <button class="ui basic button plus"><span class="mobile-only mr-1">Add Procedure</span>+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label-title">Surgical Procedure (optional)</label>
+            <div class="fields">
+              <div class="thirteen wide field">
+                <select class="ui fluid dropdown">
+                  <option value="">Enter surgical procedure</option>
+                  <option value="500">$500</option>
+                  <option value="1000">$1000</option>
+                  <option value="1500">$1500</option>
+                  <option value="2000">$2000</option>
+                </select>
+              </div>
+              <div class="three wide field mobile-mt-1">
+                <button class="ui basic button plus"><span class="mobile-only mr-1">Add Procedure</span>+</button>
+              </div>
+            </div>
+          </div>
+          <button class="ui fluid large primary button" type="submit">Proceed</button>
+        </form>
+        <a href=""><p class="cancel">Cancel and go back</p></a>
+
+      </div>
+    </div>
+
+  </div>
+</div>

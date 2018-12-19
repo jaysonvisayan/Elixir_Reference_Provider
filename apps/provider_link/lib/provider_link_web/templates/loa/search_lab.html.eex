@@ -1,0 +1,154 @@
+<div class="ui bottom attached tab segment" data-tab="lab">
+  <div class="ui equal width form" id="loa_lab_search">
+    <div class="fields">
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="range_start_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Start Date" role="mask" class="date_mask" id="start_date_lab">
+          </div>
+        </div>
+      </div>
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="range_end_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="End Date" role="mask" class="date_mask" id="end_date_lab">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="Card Number" role="mask" class="card_mask" id="card_no_lab">
+      </div>
+
+      <div class="field" role="date_picker">
+        <div class="ui calendar" name="start_date">
+          <div class="ui input left icon">
+            <i class="calendar icon"></i>
+            <input type="text" placeholder="Birth Date" role="mask" class="date_mask" id="birth_date_lab">
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <input type="text" placeholder="LOA Number" id="loa_no_lab">
+      </div>
+
+      <div class="field">
+        <div class="ui primary buttons">
+          <div class="ui button" id="btn_search_lab"><i class="search icon"></i>Search</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="div_lab">
+    <table class="ui celled table big-table" style="width: 100%" role="loa_table" id="tbl_lab" >
+      <thead>
+        <tr>
+          <td><input type="checkbox" style="width:20px; height:20px" id="checkAlllab"></td>
+          <td class="bold dim">MEMBER INFORMATION</td>
+          <td class="bold dim">PAYOR</td>
+          <td class="bold dim">ISSUED DATE/TIME</td>
+          <td class="bold dim">AMOUNT</td>
+          <td class="bold dim">STATUS</td>
+          <td class="bold dim">LOA NUMBER</td>
+          <%# <td class="bold dim"></td> %>
+        </tr>
+      </thead>
+      <tbody>
+        <%# <%= if Enum.empty?(@labs) do %1> %>
+        <%#   <tr class="text-center"> %>
+        <%#     <td colspan="6">No Records Found!</td> %>
+        <%#   </tr> %>
+        <%# <% else %1> %>
+          <%= for lab <- @labs do %>
+            <tr>
+              <td>
+                <%= if lab.status == "Approved" && lab.is_cart == false && lab.is_batch == false do %>
+                  <input style="width:20px; height:20px" type="checkbox" class="selection" value="<%= lab.id %>" id="lab_loa_ids">
+                <% else %>
+                  <input style="width:20px; height:20px" type="checkbox" id="lab_loa_ids" class="selection" value="" disabled >
+                <% end %>
+              </td>
+              <td>
+                <%= if lab.status == "draft" or lab.status == "" or is_nil(lab.status) do %>
+                  <a href="loas/<%= lab.id %>/request/lab"><div>Card No.: <%= format_card_no(lab.card.number) %></div></a>
+                <% else %>
+                  <a href="loas/<%= lab.id %>/show"><div>Card No.: <%= format_card_no(lab.card.number) %></div></a>
+                <% end %>
+                <%# <div>Member Name: <%= format_name_last(lab.card.member) %1></div> %>
+                <div>Age: <%= get_age(lab.card.member.birth_date) %> </div>
+                <%# <div>Birth Date: <%= format_date(lab.card.member.birth_date) %1></div> %>
+                <div>Gender: <%= lab.card.member.gender %></div>
+              </td>
+              <td>Maxicare</td>
+              <td><%= format_datetime(lab.issue_date) %></td>
+              <td class="bold"><%= if is_nil(lab.total_amount) do "" else lab.total_amount |> Decimal.round(2) end %></td>
+              <td>
+                <%= cond do %>
+                  <% lab.status == "" -> %>
+                    <div class="tag tag--blue">draft</div>
+                  <% is_nil(lab.status) -> %>
+                    <div class="tag tag--blue">draft</div>
+                  <% String.downcase(lab.status) == "draft" -> %>
+                    <div class="tag tag--blue"><%= lab.status %></div>
+                  <% String.downcase(lab.status) == "pending" -> %>
+                    <div class="tag tag--orange"><%= lab.status %></div>
+                  <% String.downcase(lab.status) == "approved" -> %>
+                    <div class="tag tag--green"><%= lab.status %></div>
+                  <% String.downcase(lab.status) == "cancelled" -> %>
+                    <div class="tag tag--black"><%= lab.status %></div>
+                  <% String.downcase(lab.status) == "disapproved" -> %>
+                    <div class="tag tag--red"><%= lab.status %></div>
+                <% end %>
+              </td>
+              <td><%= lab.loa_number %></td>
+              <%# <td><a href=""><span class="mobile-only mr-1"> Download </span><img src="images/table_row_download.png" alt=""></a></td> %>
+            </tr>
+          <% end %>
+        <%# <% end %1> %>
+      </tbody>
+      <tfoot>
+        <%= if not Enum.empty?(@labs) do %>
+          <tr>
+            <td>
+              <%= form_for @conn, loa_path(@conn, :add_to_cart), [id: "add-to-cart", multipart: true, as: :loa], fn _f -> %>
+                <input type="hidden" name="loa[loa_ids]" id="loa_ids_lab"/>
+                <button class="ui basic blue button disabled" id="add_to_cart_lab" type="submit">
+                  <i class="plus icon"></i>
+                  ADD TO CART
+                </button>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tfoot>
+    </table>
+  </div>
+
+  <%# <div class="ui equal width form"> %>
+  <%#   <div class="fields"> %>
+
+  <%#     <div class="field"> %>
+  <%#       <div class="ui basic buttons"> %>
+  <%#         <div class="ui button">Export</div> %>
+  <%#         <div class="ui floating dropdown icon button"> %>
+  <%#           <i class="dropdown icon"></i> %>
+  <%#           <div class="menu"> %>
+  <%#             <div class="item"><i class="file excel outline icon"></i> CSV </div> %>
+  <%#             <div class="item"><i class="file code outline icon"></i> JSON </div> %>
+  <%#             <div class="item"><i class="file pdf outline icon"></i> PDF </div> %>
+  <%#             <div class="item"><i class="file archive outline icon"></i> ZIP </div> %>
+  <%#           </div> %>
+  <%#         </div> %>
+  <%#       </div> %>
+  <%#     </div> %>
+
+  <%#   </div> %>
+  <%# </div> %>
+</div>

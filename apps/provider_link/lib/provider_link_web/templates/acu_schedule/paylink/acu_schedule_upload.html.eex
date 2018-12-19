@@ -1,0 +1,74 @@
+<%= form_for @changeset, acu_schedule_path(@conn, :submit_upload, @acu_schedule.id), [as: :acu_schedule_upload, class: "ui form mt-3"], fn f -> %>
+<div class="ui container">
+  <div class="ui grid">
+    <p class="info-content">Upload ACU Schedule</p>
+    <div class="row">
+      <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+        <div class="mb-3">
+          <span class="info-title">Company Code</span>
+          <span class="bold fs-16"><%= @acu_schedule.account_code %></span>
+        </div>
+      </div>
+      <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+        <div class="mb-3">
+          <span class="info-title">Company Name</span>
+          <span class="bold fs-16"><%= @acu_schedule.account_name %></span>
+        </div>
+      </div>
+      <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+      </div>
+      <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+        <div class="mb-3">
+          <span class="info-title">Date From</span>
+          <span class="bold fs-16"><%= @acu_schedule.date_from %></span>
+        </div>
+      </div>
+      <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+        <div class="mb-3">
+          <span class="info-title">Date To</span>
+          <span class="bold fs-16"><%= @acu_schedule.date_to %></span>
+        </div>
+      </div>
+      <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+      </div>
+      <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+        <div class="mb-3">
+          <span class="info-title">Number of Guaranteed Heads</span>
+          <span class="bold fs-16"><%= @acu_schedule.no_of_guaranteed %></span>
+        </div>
+      </div>
+      <div class="four wide computer sixteen wide tablet sixteen wide mobile column">
+        <div class="mb-3">
+          <span class="info-title">Total Number of Member who availed ACU</span>
+          <span class="bold fs-16"><%= @acu_schedule.no_of_members %></span>
+        </div>
+      </div>
+      <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+      </div>
+      <div class="eight wide computer sixteen wide tablet sixteen wide mobile column"  role="multipleFileUpload">
+        <span class="info-title">Please upload supporting document/s</span>
+        <div class="ui fluid basic icon buttons">
+          <a class="ui button" id="addFile">
+            <span class="upload_txt" name="front_side">
+              Upload Supporting Document
+            </span><i class="cloud upload icon"></i>
+          </a>
+          <button type="button" class="ui button" file="front_side" id="upload"><i class="camera icon"></i></button>
+        </div>
+        <div class="ui middle aligned list" id="filePreviewContainer">
+      </div>
+      <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+      </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        <button class="large ui button fluid" type="submit">Submit</button>
+        </div>
+        <div class="eight wide computer sixteen wide tablet sixteen wide mobile column">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%= if not is_nil(@conn.params["paylink_user_id"]) do %>
+  <input type="hidden" value="<%= @conn.params["paylink_user_id"] %>" name="paylink_user_id">
+<% end %>
+<% end %>

@@ -1,0 +1,43 @@
+<div class="ui modal-main tiny modal" id="rescheduled_loa_modal">
+    <div class="scrolling content">
+      <div class="text-center">
+        <p class="success-message success-message--title mt-2">Are you sure you want to reschedule this LOA?</p>
+      </div>
+      <div class="modal-content mt-4">
+        <%= if @loa.coverage != "ACU" do %>
+          <p class="segment-title">CONSULTATION DATE</p>
+          <p class="segment-content-bold"><%= @loa.consultation_date %></p>
+
+          <div class="segment-gap"></div>
+        <% end %>
+        <div class="segment-gap"></div>
+        <p class="segment-title">DIAGNOSIS</p>
+        <%= for loa_diagnosis <- @loa.loa_diagnosis do %>
+          <p class="segment-content-bold"><%= loa_diagnosis.diagnosis_code %> - <span class="dim thin"><%= loa_diagnosis.diagnosis_description %></p>
+        <% end %>
+        <div class="segment-gap"></div>
+
+        <p class="segment-title">REQUESTED BY</p>
+        <p class="segment-content-bold"><%= @conn.assigns.current_user.agent.first_name %></p>
+        <div class="segment-gap"></div>
+        <p class="segment-title">TOTAL AMOUNT</p>
+        <p class="segment-content-bold"><%= @loa.total_amount %></p>
+        <div class="segment-gap"></div>
+        <div class="actions">
+          <div class="ui container">
+            <div class="ui grid">
+              <div class="row">
+                <div class="eight wide column">
+                  <button class="big ui basic deny button fluid button-no" type="button" id=no_reschedule_loa_button"><i class="remove icon"></i>No</button>
+                </div>
+                <div class="eight wide column">
+                  <button authorization_id="<%= @loa.payorlink_authorization_id %>" class="big ui primary button fluid" type="button" id="yes_reschedule_loa_button"><i class="checkmark icon"></i>Yes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+

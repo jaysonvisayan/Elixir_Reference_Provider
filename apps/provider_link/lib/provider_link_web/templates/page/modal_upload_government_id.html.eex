@@ -1,0 +1,49 @@
+<div id="modal_government_id" class="ui tiny modal">
+  <%= if assigns[:paylink_user_id] do %>
+  <% else %>
+    <i class="close icon"></i>
+  <% end %>
+  <div class="content">
+    <div class="fs-20 bold mb-2 text-center">Upload Government Issued ID</div>
+      <div class="ui segments">
+        <div class="ui segment">
+          <h5 class="ui header">
+            Upload Government Issued ID
+          </h5>
+        </div>
+        <div class="ui segment" id="fileUpload">
+          <br>
+          <form class="ui form">
+            <div class="ui grid centered container">
+              <div class="ui centered special cards">
+                <div class="card">
+                  <div class="blurring dimmable image">
+                    <div class="ui inverted dimmer">
+                      <div class="content">
+                        <div class="center">
+
+                        </div>
+                      </div>
+                    </div>
+                    <img src="/images/file-upload.png" id="photo">
+                  </div>
+                  <div class="extra content">
+                    <label class="ui button" for="imageUpload" id="imageLabel"><i class="open folder icon"></i> Browse Photo</label>
+                      <a class="ui primary button" id="capture"><i class="camera icon"></i>Capture</a>
+                      <br>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <br>
+            <div id="loader"></div><p role="append_new_err"></p>
+            <button type="button" class="ui fluid primary button large"  id="submit_ID" value="Submit">Save</button>
+            <%= if assigns[:paylink_user_id] do %>
+              <input class="ui hide" id="photo_params_paylink_user_id" name="photo_params[paylink_user_id]" type="hidden" value=<%= @paylink_user_id %>>
+            <% end %>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+

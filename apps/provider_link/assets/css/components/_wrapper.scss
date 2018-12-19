@@ -1,0 +1,119 @@
+@import '../variables';
+.main-wrapper {
+    padding-left: 6rem;
+    padding-top: 8rem;
+    margin-left: 1rem;
+    padding-bottom: 6rem;
+}
+
+.main-wrapper--fullscreen {
+    height: 100vh;
+    padding-left: 0;
+    margin: 0;
+    padding-bottom: 6rem;
+}
+
+.main-wrapper--fullscreen-banner {
+    height: 100vh;
+    padding-left: 0;
+    padding-top: 59px;
+    margin: 0;
+    padding-bottom: 6rem;
+}
+
+.dashboard-img-wrapper {
+    cursor: pointer;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding: 2rem 0;
+    border: 1px solid #EFEFEF;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+    p {
+        color: $black;
+        font-weight: 300;
+        padding-top: 0.5rem;
+    }
+    &:hover {
+        transform: scale(1.1);
+    }
+}
+
+.ui.equal.height.two.column.grid .column .dashboard-img-wrapper {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border: 1px solid #EFEFEF;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    p {
+        color: $gray;
+        font-weight: 300;
+        padding-top: 0.5rem;
+    }
+}
+
+.right-side-out__inner-wrapper {
+    overflow-y: auto;
+    height: 100%;
+    padding: 1.5rem;
+}
+
+.member-card-wrapper {
+    background: $brand_color;
+    color: $white;
+    border-radius: 4px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    .skew-bg {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -50%;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.04);
+        transform: skewX(-54deg);
+    }
+    .member-card-title {
+        text-align: center;
+        text-transform: uppercase;
+    }
+    .member-card-photo {
+        text-align: center;
+        a {
+            display: block;
+            color: $white;
+            .member-card-icon {
+                display: inline-block;
+                vertical-align: middle;
+            }
+        }
+    }
+}
+
+.new-method-wrapper {
+    padding: 4rem 1.5rem;
+    background: #F9F9F9;
+    border: 1px solid #EBEBEB;
+    border-radius: 4px;
+    .new-method-title {
+        margin-bottom: 0;
+        color: #838383;
+        font-size: 18px;
+    }
+    .new-method-content {
+        color: $gray;
+    }
+}
+
+.assessed-amount-wrapper {
+    display: flex;
+    justify-content: space-between;
+    .assessed-amount-item {
+        display: flex;
+        align-items: center;
+    }
+}
